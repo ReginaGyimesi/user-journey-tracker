@@ -12,26 +12,26 @@
   - Init server
   - Create MongoDB Atlas account
   - Connect to DB
+  - Init client (React, TS), connect to BE
 
 ### Tasks completed
 
 - Grasped a good understanding of the task, read about MERN and learned about Node, Express and MongoDB with ChatGPT
+- Made a small app to play around with to perform basic functionalities, display and add data based on a Mongo tutorial (not related to the topic of this exercise, just for my understanding)
 - Created an Atlas account and added a new cluster
 - Connected server to MongoDB
 
 ### Challenges
 
-- Code for now is in JS but will change to TS across all code
-- Have not initalised app and connected server to app yet
-- Typo in Atlas cluster name (need to redo)
+- Read and wrote lots of code today, will be interesting to bring this into practice into a new system later on
+- Practice app's BE is written in JS, use TS for new app
+- (Mistyped cluster name on Atlas)
 
 ## Date: 2025-09-13
 
 ### Goals for today
 
-- Init app (React, TS, RTK?)
 - Refactor BE to TS
-- Connect to BE
 - Start planning!
   - Define requirements (functional/non-functional requirements)
   - Create data model and events

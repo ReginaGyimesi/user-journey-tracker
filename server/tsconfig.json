@@ -10,8 +10,10 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
-    "allowImportingTsExtensions": true,
+    "noEmit": false,
+    "outDir": "./dist",
+    "rootDir": "./",
+    "allowImportingTsExtensions": false,
     "noUnusedLocals": false,
     "noUnusedParameters": false
   },
@@ -19,6 +21,6 @@
     "esm": true,
     "experimentalSpecifierResolution": "node"
   },
-  "include": ["**/*.ts", "server.js"],
-  "exclude": ["node_modules"]
+  "include": ["**/*.ts"],
+  "exclude": ["node_modules", "dist"]
 }

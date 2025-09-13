@@ -1,4 +1,4 @@
-import { MongoClient, ServerApiVersion } from "mongodb";
+import { MongoClient, ServerApiVersion, Db } from "mongodb";
 
 const uri = process.env.ATLAS_URI || "";
 const client = new MongoClient(uri, {
@@ -9,13 +9,13 @@ const client = new MongoClient(uri, {
   },
 });
 
-let db: any = null;
+let db: Db | null = null;
 
-async function connectToDatabase() {
+async function connectToDatabase(): Promise<Db> {
   if (db) {
     return db;
   }
-  
+
   try {
     // Connect the client to the server
     await client.connect();

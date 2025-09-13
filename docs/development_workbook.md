@@ -23,21 +23,40 @@
 
 ### Challenges
 
-- Read and wrote lots of code today, will be interesting to bring this into practice into a new system later on
-- Practice app's BE is written in JS, use TS for new app
+- Read and wrote lots of code today, will be interesting to bring this into practice into the new system later on
 - (Mistyped cluster name on Atlas)
 
 ## Date: 2025-09-13
 
 ### Goals for today
 
+#### BE and planning focused day
+
 - Refactor BE to TS
+- Create new BE connection on Atlas
+- Read about event sourcing
 - Start planning!
   - Define requirements (functional/non-functional requirements)
-  - Create data model and events
+  - Create data model
+  - Mock events?
   - System architecure
     - Diagram, technical justifications
-  - Simple wireframe
+
+### Tasks completed
+
+-
+
+### Challenges
+
+-
+
+## Date: 2025-09-13
+
+### Goals for today
+
+#### FE focused day
+
+-
 
 ### Tasks completed
 

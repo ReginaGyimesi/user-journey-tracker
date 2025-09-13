@@ -1,14 +1,14 @@
 import express from "express";
 import cors from "cors";
-import records from "./routes/record.js";
 import connectToDatabase from "./db/connection.js";
+import users from "./routes/users.js";
 
 const PORT = process.env.PORT || 5050;
 const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use("/record", records);
+app.use("/api", users);
 
 // Initialize database connection and start server
 async function startServer() {

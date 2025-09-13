@@ -22,7 +22,7 @@ async function connectToDatabase(): Promise<Db> {
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Successfully connected to MongoDB");
-    db = client.db("user_journey_tracker");
+    db = client.db("userTrackingDB");
     return db;
   } catch (err) {
     console.error(err);

@@ -1,14 +1,32 @@
-import React from "react";
+import { FC, useEffect, useState } from "react";
 import styled from "styled-components";
-import { Record } from "../types";
+import { User } from "../types";
+import { getUsers } from "../services/api";
 
-export const RecordsTable: React.FC<RecordsTableProps> = ({
-  records,
-  loading,
-  error,
-}) => {
+export const UsersList: FC = () => {
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const loadUsers = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const data = await getUsers();
+      setUsers(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An error occurred");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadUsers();
+  }, []);
+
   if (loading) {
-    return <LoadingMessage>Loading records...</LoadingMessage>;
+    return <LoadingMessage>Loading users...</LoadingMessage>;
   }
 
   if (error) {
@@ -21,16 +39,14 @@ export const RecordsTable: React.FC<RecordsTableProps> = ({
         <TableHeader>
           <TableRow>
             <TableHeaderCell>Name</TableHeaderCell>
-            <TableHeaderCell>Position</TableHeaderCell>
-            <TableHeaderCell>Level</TableHeaderCell>
+            <TableHeaderCell>Email</TableHeaderCell>
           </TableRow>
         </TableHeader>
         <tbody>
-          {records.map((record) => (
-            <TableRow key={record._id}>
-              <TableCell>{record.name}</TableCell>
-              <TableCell>{record.position}</TableCell>
-              <TableCell>{record.level}</TableCell>
+          {users.map((user) => (
+            <TableRow key={user._id}>
+              <TableCell>{user.name}</TableCell>
+              <TableCell>{user.email}</TableCell>
             </TableRow>
           ))}
         </tbody>
@@ -94,9 +110,3 @@ const ErrorMessage = styled.div`
   color: #dc3545;
   font-size: 16px;
 `;
-
-interface RecordsTableProps {
-  records: Record[];
-  loading: boolean;
-  error: string | null;
-}

@@ -8,6 +8,8 @@ A MERN stack (MongoDB, Express, React, Node.js) application with TypeScript that
 
 #### L1: DB Schema/diagram for main system entities and data fields.
 
+##### Data model
+
 I generated the possible entities with ChatGPT:
 
 `users`
@@ -80,6 +82,10 @@ erDiagram
         object metadata
     }
 ```
+
+#### Best storage approach for search
+
+TBA
 
 #### L2: DB implementation using free-tier cloud service.
 

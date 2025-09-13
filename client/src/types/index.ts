@@ -1,6 +1,5 @@
-export interface Record {
+export interface User {
   _id: string;
   name: string;
-  position: string;
-  level: string;
+  email: string;
 }

@@ -2,9 +2,72 @@
 
 A MERN stack (MongoDB, Express, React, Node.js) application with TypeScript that tracks and visualises user behaviours and journeys on a shopping platform. The system records key user events e.g. session start time, pages visited, purchase count, time spent on pages, and provides searchable insights for individual users.
 
+## Installation Guide
+
+### Prerequisites
+
+- Node.js (version 16 or higher)
+- npm or yarn
+- MongoDB (local or cloud instance)
+
+### Setup Steps
+
+1. **Clone and navigate to the project**
+
+   ```bash
+   git clone <your-repo-url>
+   cd user-journey-tracker
+   ```
+
+2. **Install server dependencies**
+
+   ```bash
+   cd server
+   npm install
+   ```
+
+3. **Install client dependencies**
+
+   ```bash
+   cd ../client
+   npm install
+   ```
+
+4. **Set up environment variables**
+
+   - Create `server/config.env` file
+   - Add your MongoDB connection string and any other required environment variables
+   - TBA: add test user to Mongo?
+
+5. **Build the server**
+
+   ```bash
+   cd server
+   npm run build
+   ```
+
+6. **Start the development environment**
+   ```bash
+   cd ..
+   ./start-dev.sh
+   ```
+
+### What the script does:
+
+- Builds the TypeScript server code
+- Starts the server on port 5050
+- Starts the React client on port 3000
+- Opens the frontend in your browser
+
+### Access points:
+
+- Frontend: http://localhost:3000
+- API: http://localhost:5050
+- API Documentation: http://localhost:5050/api-docs
+
 ## Run locally
 
-To run the application locally from the source folder and in the terminal, use:
+To run the application locally from the source folder, open a terminal and use:
 
 `./start-dev.sh`
 
@@ -120,4 +183,7 @@ User stories:
 - As a product analyst, I'd like to see how long customers are spending on each page so I can identify drop off points.
 
 ![Wireframes](/assets/wireframes.svg)
-<img src="/assets/wireframes.svg">
+
+#### L2: More advanced prototype or MVP to present the idea (Pages transition and basic actions, but not connected to the Backend API)
+
+#### L3: Simple Web App (hosted at least locally) with data display/visualization views/pages connected to Backend API (no data entry forms)

@@ -31,7 +31,11 @@ export const UsersList: FC = () => {
     <UsersListContainer>
       <SectionTitle>Users</SectionTitle>
       <UsersSection>
-        {!loading && !error ? (
+        {loading ? (
+          <LoadingMessage>Loading users...</LoadingMessage>
+        ) : error ? (
+          <ErrorMessage>Error loading users</ErrorMessage>
+        ) : (
           <UsersTable>
             <thead>
               <tr>
@@ -51,8 +55,6 @@ export const UsersList: FC = () => {
               ))}
             </tbody>
           </UsersTable>
-        ) : (
-          <LoadingMessage>Loading users...</LoadingMessage>
         )}
       </UsersSection>
     </UsersListContainer>

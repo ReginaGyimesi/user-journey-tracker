@@ -186,4 +186,10 @@ User stories:
 
 #### L2: More advanced prototype or MVP to present the idea (Pages transition and basic actions, but not connected to the Backend API)
 
+Tech used: tba
+
+<img src="/assets/dashboard.png" alt="Dashboard page" width="150" style="display: inline-block; margin-right: 10px;">
+<img src="/assets/users.png" alt="Users page" width="150" style="display: inline-block; margin-right: 10px;">
+<img src="/assets/single-user.png" alt="Signle user page" width="150" style="display: inline-block;">
+
 #### L3: Simple Web App (hosted at least locally) with data display/visualization views/pages connected to Backend API (no data entry forms)

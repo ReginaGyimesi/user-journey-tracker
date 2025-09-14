@@ -158,9 +158,15 @@ I chose MongoDB Atlas on AWS because MongoDB was a requirement for this project,
 
 Although Amazon DocumentDB is also MongoDB compatible, I found that Atlas offers all the features necessary to host and run this exercise efficiently.
 
+---
+
 ### API L2
 
+---
+
 ### Cloud L1
+
+---
 
 ### Frontend L4
 

@@ -2,6 +2,12 @@
 
 A MERN stack (MongoDB, Express, React, Node.js) application with TypeScript that tracks and visualises user behaviours and journeys on a shopping platform. The system records key user events e.g. session start time, pages visited, purchase count, time spent on pages, and provides searchable insights for individual users.
 
+## Run locally
+
+To run the application locally from the source folder and in the terminal, use:
+
+`./start-dev.sh`
+
 ## Chosen tracks
 
 ### Database L2

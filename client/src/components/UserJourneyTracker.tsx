@@ -1,15 +1,17 @@
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { FC } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import { useGetUserByIdQuery, useGetUserSessionsQuery } from "../store/api";
 import { useApiError } from "../hooks/useApiError";
-import { mockUserJourney } from "../data/mockData";
+import {
+  useGetUserByIdQuery,
+  useGetUserEventsQuery,
+  useGetUserSessionsQuery,
+} from "../store/api";
 import { calculateDuration } from "../utils/helpers";
-import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 
 export const UserJourneyTracker: FC = () => {
   const { userId } = useParams<{ userId: string }>();
-  const userJourney = mockUserJourney;
   const {
     data: user,
     isLoading: userLoading,
@@ -22,8 +24,14 @@ export const UserJourneyTracker: FC = () => {
     error: sessionsError,
   } = useGetUserSessionsQuery(userId!, { skip: !userId });
 
-  const loading = userLoading || sessionsLoading;
-  const error = userError || sessionsError;
+  const {
+    data: userEvents,
+    isLoading: eventsLoading,
+    error: eventsError,
+  } = useGetUserEventsQuery(userId!, { skip: !userId });
+
+  const loading = userLoading || sessionsLoading || eventsLoading;
+  const error = userError || sessionsError || eventsError;
   const errorMessage = useApiError(error as FetchBaseQueryError | undefined);
 
   if (loading) {
@@ -64,7 +72,19 @@ export const UserJourneyTracker: FC = () => {
           <UserMetricLabel>All time sessions</UserMetricLabel>
         </UserMetricCard>
         <UserMetricCard>
-          <UserMetricValue>{userJourney.totalPurchases}</UserMetricValue>
+          <UserMetricValue>{userEvents?.event_count || 0}</UserMetricValue>
+          <UserMetricLabel>All time events</UserMetricLabel>
+        </UserMetricCard>
+        <UserMetricCard>
+          <UserMetricValue>
+            {userEvents?.avg_time_spent_seconds
+              ? Math.round(userEvents.avg_time_spent_seconds / 60)
+              : 0}
+          </UserMetricValue>
+          <UserMetricLabel>Avg. minutes spent</UserMetricLabel>
+        </UserMetricCard>
+        <UserMetricCard>
+          <UserMetricValue>{0}</UserMetricValue>
           <UserMetricLabel>All time purchases</UserMetricLabel>
         </UserMetricCard>
       </UserMetricsSection>
@@ -108,26 +128,72 @@ export const UserJourneyTracker: FC = () => {
 
       <RecentEventSection>
         <SectionTitle>
-          Most recent event: {userJourney.events[0].timestamp}
+          Most recent event:{" "}
+          {userEvents?.events[0]
+            ? new Date(userEvents.events[0].timestamp).toLocaleString()
+            : "No events found"}
         </SectionTitle>
-        <JourneyFlow>
-          <FlowStep>Session started</FlowStep>
-          <FlowArrow>→</FlowArrow>
-          <FlowStep>Products page visited</FlowStep>
-          <FlowArrow>→</FlowArrow>
-          <FlowStep>Product visited</FlowStep>
-          <FlowArrow>→</FlowArrow>
-          <FlowStep>Session ended</FlowStep>
-        </JourneyFlow>
+        {userEvents?.events[0] && (
+          <JourneyFlow>
+            <FlowStep>{userEvents.events[0].event_type}</FlowStep>
+            {userEvents.events[0].metadata.page_id && (
+              <>
+                <FlowArrow>→</FlowArrow>
+                <FlowStep>
+                  Page: {userEvents.events[0].metadata.page_id}
+                </FlowStep>
+              </>
+            )}
+            {userEvents.events[0].metadata.time_spent_seconds && (
+              <>
+                <FlowArrow>→</FlowArrow>
+                <FlowStep>
+                  {userEvents.events[0].metadata.time_spent_seconds}s spent
+                </FlowStep>
+              </>
+            )}
+          </JourneyFlow>
+        )}
       </RecentEventSection>
 
       <AllEventsSection>
-        <SectionTitle>All events</SectionTitle>
-        <EventsList>
-          {userJourney.events.map((event, index) => (
-            <EventItem key={index}>{event.type}</EventItem>
-          ))}
-        </EventsList>
+        <SectionTitle>All events ({userEvents?.event_count || 0})</SectionTitle>
+        <EventsTable>
+          <thead>
+            <tr>
+              <th>Event Type</th>
+              <th>Timestamp</th>
+              <th>Session ID</th>
+              <th>Page/Item</th>
+              <th>Time Spent</th>
+              <th>Search Query</th>
+            </tr>
+          </thead>
+          <tbody>
+            {userEvents?.events.map((event) => (
+              <tr key={event._id}>
+                <td>{event.event_type}</td>
+                <td>{new Date(event.timestamp).toLocaleString()}</td>
+                <td>{event.session_id}</td>
+                <td>
+                  {event.metadata.page_id || event.metadata.item_id || "-"}
+                </td>
+                <td>
+                  {event.metadata.time_spent_seconds
+                    ? `${event.metadata.time_spent_seconds}s`
+                    : "-"}
+                </td>
+                <td>{event.metadata.search_query || "-"}</td>
+              </tr>
+            )) || (
+              <tr>
+                <td colSpan={6} style={{ textAlign: "center", color: "#666" }}>
+                  No events found
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </EventsTable>
       </AllEventsSection>
     </UserJourneyContainer>
   );
@@ -167,7 +233,7 @@ const UserID = styled.p`
 
 const UserMetricsSection = styled.div`
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 20px;
   margin-bottom: 30px;
 `;
@@ -264,19 +330,27 @@ const AllEventsSection = styled.div`
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 `;
 
-const EventsList = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+const EventsTable = styled.table`
+  width: 100%;
+  border-collapse: collapse;
   margin-top: 20px;
-`;
 
-const EventItem = styled.div`
-  padding: 8px 12px;
-  background: #f8f9fa;
-  border-radius: 4px;
-  font-size: 14px;
-  color: #333;
+  th,
+  td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #333;
+  }
+
+  tr:hover {
+    background-color: #f8f9fa;
+  }
 `;
 
 const LoadingMessage = styled.div`

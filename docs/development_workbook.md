@@ -72,6 +72,7 @@
   - used third party lib `swagger-ui-express` https://stackoverflow.com/a/53834523
 - Added shell script to start BE, FE and API docs `./start-dev.sh`
 - Added wireframes, user stories
+- Added MVP with mock data and data from BE
 
 ### Challenges
 

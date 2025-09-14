@@ -20,6 +20,29 @@ export interface Session {
   location: string;
 }
 
+export interface DashboardStats {
+  allTimeUsers: number;
+  allTimeSessions: number;
+  allTimePurchases: number;
+  avgMinutesSpent: number;
+}
+
+export interface Event {
+  _id: string;
+  event_id: string;
+  user_id: string;
+  session_id: string;
+  event_type: string;
+  timestamp: string;
+  metadata: {
+    page_id?: string;
+    item_id?: string;
+    time_spent_seconds?: number;
+    search_query?: string;
+    price?: number;
+  };
+}
+
 // router is an instance of the express router.
 // We use it to define our routes.
 // The router will be added as a middleware and will take control of requests starting with path /users.
@@ -265,76 +288,190 @@ router.get("/sessions", async (req, res) => {
   }
 });
 
-// This section will help you get a single record by id
-// router.get("/:id", async (req, res) => {
-//   try {
-//     const db = await connectToDatabase();
-//     let collection = db.collection("records");
-//     let query = { _id: new ObjectId(req.params.id) };
-//     let result = await collection.findOne(query);
+/**
+ * @swagger
+ * /api/dashboard/stats:
+ *   get:
+ *     summary: Get dashboard statistics
+ *     description: Retrieve aggregated statistics for the dashboard including all-time users, sessions, purchases, and average minutes spent
+ *     tags: [Dashboard]
+ *     responses:
+ *       200:
+ *         description: Dashboard statistics retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 allTimeUsers:
+ *                   type: number
+ *                   description: Total number of users
+ *                   example: 50
+ *                 allTimeSessions:
+ *                   type: number
+ *                   description: Total number of sessions
+ *                   example: 171
+ *                 allTimePurchases:
+ *                   type: number
+ *                   description: Total number of items purchased
+ *                   example: 1367
+ *                 avgMinutesSpent:
+ *                   type: number
+ *                   description: Average minutes spent per session
+ *                   example: 4
+ *       500:
+ *         $ref: '#/components/responses/ErrorResponse'
+ */
+router.get("/dashboard/stats", async (req, res) => {
+  try {
+    const db = await connectToDatabase();
 
-//     if (!result) res.send("Not found").status(404);
-//     else res.send(result).status(200);
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).send("Error fetching record");
-//   }
-// });
+    // Get all time users count
+    const usersCollection = db.collection<User>("users");
+    const allTimeUsers = await usersCollection.countDocuments();
 
-// This section will help you create a new record.
-// router.post("/", async (req, res) => {
-//   try {
-//     const db = await connectToDatabase();
-//     let newDocument = {
-//       name: req.body.name,
-//       position: req.body.position,
-//       level: req.body.level,
-//     };
-//     let collection = db.collection("records");
-//     let result = await collection.insertOne(newDocument);
-//     res.send(result).status(201);
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).send("Error adding record");
-//   }
-// });
+    // Get all time sessions count
+    const sessionsCollection = db.collection<Session>("sessions");
+    const allTimeSessions = await sessionsCollection.countDocuments();
 
-// This section will help you update a record by id.
-// router.patch("/:id", async (req, res) => {
-//   try {
-//     const db = await connectToDatabase();
-//     const query = { _id: new ObjectId(req.params.id) };
-//     const updates = {
-//       $set: {
-//         name: req.body.name,
-//         position: req.body.position,
-//         level: req.body.level,
-//       },
-//     };
+    // For now, we'll use mock data for purchases since we don't have a purchases collection
+    // In a real application, you would have a purchases collection
+    const allTimePurchases = 1367; // This should come from a purchases collection
 
-//     let collection = db.collection("records");
-//     let result = await collection.updateOne(query, updates);
-//     res.send(result).status(200);
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).send("Error updating record");
-//   }
-// });
+    // Calculate average minutes spent from sessions
+    const sessions = await sessionsCollection.find({}).toArray();
+    let totalMinutes = 0;
+    let validSessions = 0;
 
-// This section will help you delete a record
-// router.delete("/:id", async (req, res) => {
-//   try {
-//     const db = await connectToDatabase();
-//     const query = { _id: new ObjectId(req.params.id) };
+    sessions.forEach((session) => {
+      const startTime = new Date(session.start_time);
+      const endTime = new Date(session.end_time);
+      const durationMs = endTime.getTime() - startTime.getTime();
+      const durationMinutes = durationMs / (1000 * 60); // Convert to minutes
 
-//     const collection = db.collection("records");
-//     let result = await collection.deleteOne(query);
+      if (durationMinutes > 0 && durationMinutes < 1440) {
+        // Valid session (less than 24 hours)
+        totalMinutes += durationMinutes;
+        validSessions++;
+      }
+    });
 
-//     res.send(result).status(200);
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).send("Error deleting record");
-//   }
-// });
+    const avgMinutesSpent =
+      validSessions > 0 ? Math.round(totalMinutes / validSessions) : 4;
+
+    const dashboardStats: DashboardStats = {
+      allTimeUsers,
+      allTimeSessions,
+      allTimePurchases,
+      avgMinutesSpent,
+    };
+
+    res.send(dashboardStats).status(200);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error fetching dashboard statistics");
+  }
+});
+
+/**
+ * @swagger
+ * /api/users/{id}/events:
+ *   get:
+ *     summary: Get events for a specific user
+ *     description: Retrieve all events for a user
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The user's unique identifier
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Events retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user_id:
+ *                   type: string
+ *                 events:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       _id:
+ *                         type: string
+ *                       event_id:
+ *                         type: string
+ *                       user_id:
+ *                         type: string
+ *                       session_id:
+ *                         type: string
+ *                       event_type:
+ *                         type: string
+ *                       timestamp:
+ *                         type: string
+ *                       metadata:
+ *                         type: object
+ *                         properties:
+ *                           page_id:
+ *                             type: string
+ *                           item_id:
+ *                             type: string
+ *                           time_spent_seconds:
+ *                             type: number
+ *                           search_query:
+ *                             type: string
+ *                           price:
+ *                             type: number
+ *       404:
+ *         description: User not found
+ *       500:
+ *         $ref: '#/components/responses/ErrorResponse'
+ */
+router.get("/users/:id/events", async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const db = await connectToDatabase();
+
+    // Get user info to verify user exists
+    const usersCollection = db.collection<User>("users");
+    const user = await usersCollection.findOne({ _id: userId });
+
+    if (!user) {
+      res.status(404).send("User not found");
+      return;
+    }
+
+    // Get all events for the user, sorted by timestamp (most recent first)
+    const eventsCollection = db.collection<Event>("events");
+    
+    // Debug: Check total events in collection
+    const totalEvents = await eventsCollection.countDocuments();
+    console.log(`Total events in collection: ${totalEvents}`);
+    
+    // Debug: Check events for this user
+    const events = await eventsCollection
+      .find({ user_id: userId })
+      .sort({ timestamp: -1 })
+      .toArray();
+    
+    console.log(`Events found for user ${userId}: ${events.length}`);
+
+    const response = {
+      user_id: userId,
+      event_count: events.length,
+      events: events,
+    };
+
+    res.send(response).status(200);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error fetching user events");
+  }
+});
 
 export default router;

@@ -1,34 +1,44 @@
 import React from "react";
 import styled from "styled-components";
-import { mockChartData, mockDashboardMetrics } from "../data/mockData";
-import { useGetAllSessionsQuery, useGetUsersQuery } from "../store/api";
+import { mockChartData } from "../data/mockData";
+import {
+  useGetAllSessionsQuery,
+  useGetDashboardStatsQuery,
+} from "../store/api";
 import { calculateDuration } from "../utils/helpers";
 
 export const Dashboard: React.FC = () => {
-  const { data: users } = useGetUsersQuery();
+  const { data: dashboardStats, isLoading: statsLoading } =
+    useGetDashboardStatsQuery();
   const { data: sessions } = useGetAllSessionsQuery();
-
-  console.log(sessions);
 
   return (
     <DashboardContainer>
       <SectionTitle>Dashboard</SectionTitle>
       <MetricsSection>
         <MetricCard>
-          <MetricValue>{users?.length}</MetricValue>
+          <MetricValue>
+            {statsLoading ? "..." : dashboardStats?.allTimeUsers || 0}
+          </MetricValue>
           <MetricLabel>All time users</MetricLabel>
         </MetricCard>
         <MetricCard>
-          <MetricValue>{sessions?.length}</MetricValue>
+          <MetricValue>
+            {statsLoading ? "..." : dashboardStats?.allTimeSessions || 0}
+          </MetricValue>
           <MetricLabel>All time sessions</MetricLabel>
         </MetricCard>
         <MetricCard>
-          <MetricValue>{mockDashboardMetrics.allTimePurchases}</MetricValue>
+          <MetricValue>
+            {statsLoading ? "..." : dashboardStats?.allTimePurchases || 0}
+          </MetricValue>
           <MetricLabel>All time number of items purchased</MetricLabel>
         </MetricCard>
         <MetricCard>
-          <MetricValue>{mockDashboardMetrics.avgMinutesSpent}</MetricValue>
-          <MetricLabel>Avg. minutes spent</MetricLabel>
+          <MetricValue>
+            {statsLoading ? "..." : dashboardStats?.avgMinutesSpent || 0}
+          </MetricValue>
+          <MetricLabel>Average minutes spent</MetricLabel>
         </MetricCard>
       </MetricsSection>
 

@@ -22,10 +22,26 @@ export interface UserSessionsResponse {
 }
 
 export interface Event {
-  type: string;
+  _id: string;
+  event_id: string;
+  user_id: string;
+  session_id: string;
+  event_type: string;
   timestamp: string;
-  page?: string;
-  product?: string;
+  metadata: {
+    page_id?: string;
+    item_id?: string;
+    time_spent_seconds?: number;
+    search_query?: string;
+    price?: number;
+  };
+}
+
+export interface UserEventsResponse {
+  user_id: string;
+  event_count: number;
+  avg_time_spent_seconds: number;
+  events: Event[];
 }
 
 export interface UserJourney {
@@ -37,7 +53,7 @@ export interface UserJourney {
 }
 
 export interface DashboardMetrics {
-  currentUsers: number;
+  allTimeUsers: number;
   allTimeSessions: number;
   allTimePurchases: number;
   avgMinutesSpent: number;

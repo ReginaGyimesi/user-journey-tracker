@@ -1,5 +1,11 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { Session, User, UserSessionsResponse } from "../types";
+import {
+  Session,
+  User,
+  UserSessionsResponse,
+  UserEventsResponse,
+  DashboardMetrics,
+} from "../types";
 
 // Define the base query with the API base URL
 const baseQuery = fetchBaseQuery({
@@ -10,7 +16,7 @@ const baseQuery = fetchBaseQuery({
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery,
-  tagTypes: ["User", "UserSessions"],
+  tagTypes: ["User", "UserSessions", "UserEvents", "DashboardStats"],
   endpoints: (builder) => ({
     // Get all users
     getUsers: builder.query<User[], void>({
@@ -38,6 +44,21 @@ export const apiSlice = createApi({
       query: () => "/sessions",
       providesTags: ["UserSessions"],
     }),
+
+    // Get events for a specific user
+    getUserEvents: builder.query<UserEventsResponse, string>({
+      query: (userId) => `/users/${userId}/events`,
+      providesTags: (result, error, userId) => [
+        { type: "UserEvents", id: userId },
+        { type: "User", id: userId },
+      ],
+    }),
+
+    // Get dashboard statistics
+    getDashboardStats: builder.query<DashboardMetrics, void>({
+      query: () => "/dashboard/stats",
+      providesTags: ["DashboardStats"],
+    }),
   }),
 });
 
@@ -47,4 +68,6 @@ export const {
   useGetUserByIdQuery,
   useGetUserSessionsQuery,
   useGetAllSessionsQuery,
+  useGetUserEventsQuery,
+  useGetDashboardStatsQuery,
 } = apiSlice;

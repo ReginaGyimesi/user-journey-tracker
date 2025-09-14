@@ -9,7 +9,7 @@ export const useApiError = (error: FetchBaseQueryError | undefined): string => {
   }
 
   if ("status" in error) {
-    return `Error ${error.status}: ${error.statusText || "An error occurred"}`;
+    return `Error ${error.status}: ${error || "An error occurred"}`;
   }
 
   return "An error occurred";

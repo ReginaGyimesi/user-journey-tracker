@@ -94,3 +94,24 @@ TBA
 I chose MongoDB Atlas on AWS because MongoDB was a requirement for this project, and Atlas provides a fully managed, scalable, and secure environment suitable for our needs.
 
 Although Amazon DocumentDB is also MongoDB compatible, I found that Atlas offers all the features necessary to host and run this exercise efficiently.
+
+### API L2
+
+### Cloud L1
+
+### Frontend L4
+
+#### L1: Basic and sample wireframes to provide the idea (pages/views) with some user stories
+
+Functionalities: search, session start time, number of pages/items visited, purchase count, and time spent on specific pages
+
+User stories:
+
+- As an operational agent, I'd like to search by users to see detailed user activity with session time, pages visited and items purchased so I can investigate specific issues.
+- As a product manager, I'd like to see how many people drop off after a certain page so I can initiate improvements.
+- As a marketing analyst, I'd like to filter user journeys by date range and channel so that I can compare seasonal or campaign-driven behavior.
+- As a business owner, I'd like to see what are the best selling products are by purchase count or time spent on each page so I can maintain stock.
+- As a product analyst, I'd like to see how long customers are spending on each page so I can identify drop off points.
+
+![Wireframes](/assets/wireframes.svg)
+<img src="/assets/wireframes.svg">

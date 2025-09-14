@@ -63,14 +63,15 @@
 #### API, FE focused day
 
 - Create Swagger API generation
-- Create Wrifeframes, design ideas for Frontend
+- Create wireframes, user stories, design ideas for Frontend
 - Start implementing Frontend
 
 ### Tasks completed
 
 - Added Swagger for API documentation
   - used third party lib `swagger-ui-express` https://stackoverflow.com/a/53834523
-- Added shell to start BE, FE and API docs `./start-dev.sh`
+- Added shell script to start BE, FE and API docs `./start-dev.sh`
+- Added wireframes, user stories
 
 ### Challenges
 

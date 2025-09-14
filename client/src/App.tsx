@@ -1,44 +1,51 @@
 import React from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import styled from "styled-components";
+import { Dashboard } from "./components/Dashboard";
 import { UsersList } from "./components/UsersList";
+import { UserJourneyTracker } from "./components/UserJourneyTracker";
+import { NavBar } from "./components/common/NavBar";
 
 const App: React.FC = () => {
   return (
-    <AppContainer>
-      <Header>
-        <Title>User tracking dashboard</Title>
-      </Header>
-      <Content>
-        <UsersList />
-      </Content>
-    </AppContainer>
+    <Router>
+      <AppContainer>
+        <Content>
+          <NavBar />
+          <Routes>
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/users" element={<UsersList />} />
+            <Route path="/users/:userId" element={<UserJourneyTracker />} />
+          </Routes>
+        </Content>
+      </AppContainer>
+    </Router>
   );
 };
 
 export default App;
 
 const AppContainer = styled.div`
-  min-height: 100vh;
+  height: 100vh;
   background: linear-gradient(135deg, #7889d8 0%, #ceb2e9 100%);
   padding: 20px;
-`;
-
-const Header = styled.header`
-  text-align: center;
-  margin-bottom: 20px;
-`;
-
-const Title = styled.h1`
-  font-size: 2.5rem;
-  margin: 0;
-  color: white;
+  display: flex;
+  flex-direction: column;
 `;
 
 const Content = styled.div`
-  max-width: 90%;
-  margin: 0 auto;
+  flex: 1;
   background: white;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
 `;

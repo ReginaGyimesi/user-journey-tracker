@@ -1,0 +1,195 @@
+import React from "react";
+import styled from "styled-components";
+import {
+  mockChartData,
+  mockDashboardMetrics,
+  mockRecentSessions,
+} from "../data/mockData";
+
+export const Dashboard: React.FC = () => {
+  return (
+    <DashboardContainer>
+      <SectionTitle>Dashboard</SectionTitle>
+      <MetricsSection>
+        <MetricCard>
+          <MetricValue>{mockDashboardMetrics.currentUsers}</MetricValue>
+          <MetricLabel>Current users</MetricLabel>
+        </MetricCard>
+        <MetricCard>
+          <MetricValue>{mockDashboardMetrics.allTimeSessions}</MetricValue>
+          <MetricLabel>All time sessions</MetricLabel>
+        </MetricCard>
+        <MetricCard>
+          <MetricValue>{mockDashboardMetrics.allTimePurchases}</MetricValue>
+          <MetricLabel>All time number of items purchased</MetricLabel>
+        </MetricCard>
+        <MetricCard>
+          <MetricValue>{mockDashboardMetrics.avgMinutesSpent}</MetricValue>
+          <MetricLabel>Avg. minutes spent</MetricLabel>
+        </MetricCard>
+      </MetricsSection>
+
+      <ChartsSection>
+        <ChartContainer>
+          <SubsectionTitle>User Activity</SubsectionTitle>
+          <BarChart>
+            {mockChartData.map((item, index) => (
+              <Bar key={index} height={item.value / 10}>
+                <BarValue>{item.value}</BarValue>
+              </Bar>
+            ))}
+          </BarChart>
+        </ChartContainer>
+        <ChartContainer>
+          <SubsectionTitle>Session Trends</SubsectionTitle>
+          <BarChart>
+            {mockChartData.map((item, index) => (
+              <Bar key={index} height={item.value / 8}>
+                <BarValue>{item.value}</BarValue>
+              </Bar>
+            ))}
+          </BarChart>
+        </ChartContainer>
+      </ChartsSection>
+
+      <RecentSessionsSection>
+        <SubsectionTitle>Recent sessions (last 15 minutes)</SubsectionTitle>
+        <SessionsTable>
+          <thead>
+            <tr>
+              <th>Session id</th>
+              <th>User</th>
+              <th>Pages</th>
+              <th>Timestamp</th>
+            </tr>
+          </thead>
+          <tbody>
+            {mockRecentSessions.map((session) => (
+              <tr key={session.sessionId}>
+                <td>{session.sessionId}</td>
+                <td>{session.userName}</td>
+                <td>{session.pages}</td>
+                <td>{session.timestamp}</td>
+              </tr>
+            ))}
+          </tbody>
+        </SessionsTable>
+      </RecentSessionsSection>
+    </DashboardContainer>
+  );
+};
+
+const DashboardContainer = styled.div`
+  flex: 1;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  overflow-y: auto;
+`;
+
+const SectionTitle = styled.h2`
+  margin: 0 0 20px 0;
+  color: #333;
+  font-size: 24px;
+  font-weight: 600;
+`;
+
+const SubsectionTitle = styled.h3`
+  margin: 0 0 20px 0;
+  color: #333;
+`;
+
+const MetricsSection = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 30px;
+`;
+
+const MetricCard = styled.div`
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+`;
+
+const MetricValue = styled.div`
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8px;
+`;
+
+const MetricLabel = styled.div`
+  font-size: 14px;
+  color: #666;
+`;
+
+const ChartsSection = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-bottom: 30px;
+`;
+
+const ChartContainer = styled.div`
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+`;
+
+const BarChart = styled.div`
+  display: flex;
+  align-items: end;
+  gap: 10px;
+  height: 200px;
+  padding: 10px 0;
+`;
+
+const Bar = styled.div<{ height: number }>`
+  flex: 1;
+  background: linear-gradient(to top, #4f46e5, #7c3aed);
+  height: ${(props) => props.height}px;
+  border-radius: 4px 4px 0 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 5px;
+  min-height: 20px;
+`;
+
+const BarValue = styled.span`
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+`;
+
+const RecentSessionsSection = styled.div`
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+`;
+
+const SessionsTable = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+
+  th,
+  td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #333;
+  }
+
+  tr:hover {
+    background-color: #f8f9fa;
+  }
+`;

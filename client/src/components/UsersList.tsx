@@ -1,9 +1,11 @@
 import { FC, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { User } from "../types";
 import { getUsers } from "../services/api";
+import { User } from "../types";
 
 export const UsersList: FC = () => {
+  const navigate = useNavigate();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -25,76 +27,85 @@ export const UsersList: FC = () => {
     loadUsers();
   }, []);
 
-  if (loading) {
-    return <LoadingMessage>Loading users...</LoadingMessage>;
-  }
-
-  if (error) {
-    return <ErrorMessage>Error: {error}</ErrorMessage>;
-  }
-
   return (
-    <TableContainer>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHeaderCell>Name</TableHeaderCell>
-            <TableHeaderCell>Email</TableHeaderCell>
-          </TableRow>
-        </TableHeader>
-        <tbody>
-          {users.map((user) => (
-            <TableRow key={user._id}>
-              <TableCell>{user.name}</TableCell>
-              <TableCell>{user.email}</TableCell>
-            </TableRow>
-          ))}
-        </tbody>
-      </Table>
-    </TableContainer>
+    <UsersListContainer>
+      <SectionTitle>Users</SectionTitle>
+      <UsersSection>
+        {!loading && !error ? (
+          <UsersTable>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+              </tr>
+            </thead>
+            <tbody>
+              {users.map((user) => (
+                <tr
+                  key={user._id}
+                  onClick={() => navigate(`/users/${user._id}`)}
+                >
+                  <td>{user.name}</td>
+                  <td>{user.email}</td>
+                </tr>
+              ))}
+            </tbody>
+          </UsersTable>
+        ) : (
+          <LoadingMessage>Loading users...</LoadingMessage>
+        )}
+      </UsersSection>
+    </UsersListContainer>
   );
 };
 
-const TableContainer = styled.div`
-  margin: 20px;
+const UsersListContainer = styled.div`
+  flex: 1;
+  padding: 20px;
   font-family: Arial, sans-serif;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 `;
 
-const Table = styled.table`
+const SectionTitle = styled.h2`
+  margin: 0 0 20px 0;
+  color: #333;
+  font-size: 24px;
+  font-weight: 600;
+`;
+
+const UsersSection = styled.div`
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+`;
+
+const UsersTable = styled.table`
   width: 100%;
   border-collapse: collapse;
-  background: white;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-`;
 
-const TableHeader = styled.thead`
-  background: #f8f9fa;
-`;
-
-const TableRow = styled.tr`
-  &:nth-child(even) {
-    background: #f8f9fa;
+  th,
+  td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
   }
 
-  &:hover {
-    background: #e9ecef;
+  th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #333;
   }
-`;
 
-const TableHeaderCell = styled.th`
-  padding: 12px 16px;
-  text-align: left;
-  font-weight: 600;
-  color: #495057;
-  border-bottom: 2px solid #dee2e6;
-`;
+  tr {
+    cursor: pointer;
 
-const TableCell = styled.td`
-  padding: 12px 16px;
-  border-bottom: 1px solid #dee2e6;
-  color: #495057;
+    &:hover {
+      background-color: #f8f9fa;
+    }
+  }
 `;
 
 const LoadingMessage = styled.div`

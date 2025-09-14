@@ -5,7 +5,7 @@
   "scripts": {
     "build": "tsc",
     "start": "node --env-file=config.env dist/server.js",
-    "dev": "ts-node --esm server.ts",
+    "dev": "ts-node --esm --experimental-specifier-resolution=node server.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -14,9 +14,13 @@
   "description": "",
   "type": "module",
   "dependencies": {
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.8",
     "cors": "^2.8.5",
     "express": "^5.1.0",
-    "mongodb": "^6.19.0"
+    "mongodb": "^6.19.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",

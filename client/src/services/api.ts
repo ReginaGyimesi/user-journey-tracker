@@ -4,7 +4,7 @@ const API_BASE_URL = "/api";
 
 export const getUsers = async (): Promise<User[]> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/users`);
+    const response = await fetch(`${API_BASE_URL}/`);
     if (!response.ok) {
       throw new Error("Failed to get users");
     }

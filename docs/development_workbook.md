@@ -23,7 +23,8 @@
 
 ### Challenges
 
-- Read and wrote lots of code today, will be interesting to bring this into practice into the new system later on
+- Learning about a new technology
+- Spent a lot of time today reading and writing code, so it'll be interesting to put this knowledge into the new system
 - (Mistyped cluster name on Atlas)
 
 ## Date: 2025-09-13
@@ -34,33 +35,42 @@
 
 - Refactor BE to TS
 - Create new BE connection on Atlas
+- Setup DB
 - Read about event sourcing
 - Start planning!
   - Define requirements (functional/non-functional requirements)
   - Create data model
   - Mock events?
-  - System architecure
-    - Diagram, technical justifications
 
 ### Tasks completed
 
--
+- Refactored BE to TS
+- Created new cluster on Atlas with working connection
+  - Created a GET endpoint and connected FE
+  - Created MongoDB
+- Generated data model
+- Added mock data to DB
 
 ### Challenges
 
--
+- Server couldn't run with `node --env-file=config.env server` and had TypeScript compilation issues. I went over with Cursor to update imports, fix TypeScript config and the DB connection.
+- There were issues with getting users data, beacuse vite config removed the api prefix, deleted this line: `rewrite: (path) => path.replace(/^\/api/, "")`
 
 ## Date: 2025-09-13
 
 ### Goals for today
 
-#### FE focused day
+#### API, FE focused day
 
--
+- Create Swagger API generation
+- Create Wrifeframes, design ideas for Frontend
+- Start implementing Frontend
 
 ### Tasks completed
 
--
+- Added Swagger for API documentation
+  - used third party lib `swagger-ui-express` https://stackoverflow.com/a/53834523
+- Added shell to start BE, FE and API docs `./start-dev.sh`
 
 ### Challenges
 

@@ -8,6 +8,62 @@ import connectToDatabase from "../db/connection.js";
 // The router will be added as a middleware and will take control of requests starting with path /users.
 const router = express.Router();
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *           description: The user's unique identifier
+ *         name:
+ *           type: string
+ *           description: The user's name
+ *         email:
+ *           type: string
+ *           description: The user's email address
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           description: When the user was created
+ *       example:
+ *         _id: "507f1f77bcf86cd799439011"
+ *         name: "John Doe"
+ *         email: "john@example.com"
+ *         createdAt: "2023-01-01T00:00:00.000Z"
+ *   responses:
+ *     UsersListResponse:
+ *       description: List of users retrieved successfully
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: array
+ *             items:
+ *               $ref: '#/components/schemas/User'
+ *     ErrorResponse:
+ *       description: Error occurred while fetching users
+ *       content:
+ *         text/plain:
+ *           schema:
+ *             type: string
+ *             example: "Error fetching users"
+ */
+
+/**
+ * @swagger
+ * /api/:
+ *   get:
+ *     summary: Get all users
+ *     description: Retrieve a list of all users from the database
+ *     tags: [Users]
+ *     responses:
+ *       200:
+ *         $ref: '#/components/responses/UsersListResponse'
+ *       500:
+ *         $ref: '#/components/responses/ErrorResponse'
+ */
 router.get("/", async (req, res) => {
   try {
     const db = await connectToDatabase();

@@ -1,31 +1,14 @@
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { getUsers } from "../services/api";
-import { User } from "../types";
+import { useGetUsersQuery } from "../store/api";
+import { useApiError } from "../hooks/useApiError";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 
 export const UsersList: FC = () => {
   const navigate = useNavigate();
-  const [users, setUsers] = useState<User[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const loadUsers = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const data = await getUsers();
-      setUsers(data);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    loadUsers();
-  }, []);
+  const { data: users, isLoading: loading, error } = useGetUsersQuery();
+  const errorMessage = useApiError(error as FetchBaseQueryError | undefined);
 
   return (
     <UsersListContainer>
@@ -34,7 +17,7 @@ export const UsersList: FC = () => {
         {loading ? (
           <LoadingMessage>Loading users...</LoadingMessage>
         ) : error ? (
-          <ErrorMessage>Error loading users</ErrorMessage>
+          <ErrorMessage>Error loading users: {errorMessage}</ErrorMessage>
         ) : (
           <UsersTable>
             <thead>
@@ -44,7 +27,7 @@ export const UsersList: FC = () => {
               </tr>
             </thead>
             <tbody>
-              {users.map((user) => (
+              {users?.map((user) => (
                 <tr
                   key={user._id}
                   onClick={() => navigate(`/users/${user._id}`)}

@@ -1,22 +1,25 @@
 import React from "react";
 import styled from "styled-components";
-import {
-  mockChartData,
-  mockDashboardMetrics,
-  mockRecentSessions,
-} from "../data/mockData";
+import { mockChartData, mockDashboardMetrics } from "../data/mockData";
+import { useGetAllSessionsQuery, useGetUsersQuery } from "../store/api";
+import { calculateDuration } from "../utils/helpers";
 
 export const Dashboard: React.FC = () => {
+  const { data: users } = useGetUsersQuery();
+  const { data: sessions } = useGetAllSessionsQuery();
+
+  console.log(sessions);
+
   return (
     <DashboardContainer>
       <SectionTitle>Dashboard</SectionTitle>
       <MetricsSection>
         <MetricCard>
-          <MetricValue>{mockDashboardMetrics.currentUsers}</MetricValue>
-          <MetricLabel>Current users</MetricLabel>
+          <MetricValue>{users?.length}</MetricValue>
+          <MetricLabel>All time users</MetricLabel>
         </MetricCard>
         <MetricCard>
-          <MetricValue>{mockDashboardMetrics.allTimeSessions}</MetricValue>
+          <MetricValue>{sessions?.length}</MetricValue>
           <MetricLabel>All time sessions</MetricLabel>
         </MetricCard>
         <MetricCard>
@@ -53,25 +56,38 @@ export const Dashboard: React.FC = () => {
       </ChartsSection>
 
       <RecentSessionsSection>
-        <SubsectionTitle>Recent sessions (last 15 minutes)</SubsectionTitle>
+        <SubsectionTitle>Recent sessions</SubsectionTitle>
         <SessionsTable>
           <thead>
             <tr>
-              <th>Session id</th>
-              <th>User</th>
-              <th>Pages</th>
-              <th>Timestamp</th>
+              <th>Session ID</th>
+              <th>Start Time</th>
+              <th>End Time</th>
+              <th>Duration</th>
+              <th>Device</th>
+              <th>Location</th>
             </tr>
           </thead>
           <tbody>
-            {mockRecentSessions.map((session) => (
-              <tr key={session.sessionId}>
-                <td>{session.sessionId}</td>
-                <td>{session.userName}</td>
-                <td>{session.pages}</td>
-                <td>{session.timestamp}</td>
+            {sessions?.map((session) => (
+              <tr key={session.session_id}>
+                <td>{session.session_id}</td>
+                <td>{new Date(session.start_time).toLocaleString()}</td>
+                <td>{new Date(session.end_time).toLocaleString()}</td>
+                <td>
+                  {calculateDuration(session.start_time, session.end_time)}{" "}
+                  minutes
+                </td>
+                <td>{session.device}</td>
+                <td>{session.location}</td>
               </tr>
-            ))}
+            )) || (
+              <tr>
+                <td colSpan={6} style={{ textAlign: "center", color: "#666" }}>
+                  No sessions found
+                </td>
+              </tr>
+            )}
           </tbody>
         </SessionsTable>
       </RecentSessionsSection>

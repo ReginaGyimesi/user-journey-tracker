@@ -1,22 +1,66 @@
 import { FC } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
+import { useGetUserByIdQuery, useGetUserSessionsQuery } from "../store/api";
+import { useApiError } from "../hooks/useApiError";
 import { mockUserJourney } from "../data/mockData";
+import { calculateDuration } from "../utils/helpers";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 
 export const UserJourneyTracker: FC = () => {
   const { userId } = useParams<{ userId: string }>();
   const userJourney = mockUserJourney;
+  const {
+    data: user,
+    isLoading: userLoading,
+    error: userError,
+  } = useGetUserByIdQuery(userId!, { skip: !userId });
+
+  const {
+    data: userSessions,
+    isLoading: sessionsLoading,
+    error: sessionsError,
+  } = useGetUserSessionsQuery(userId!, { skip: !userId });
+
+  const loading = userLoading || sessionsLoading;
+  const error = userError || sessionsError;
+  const errorMessage = useApiError(error as FetchBaseQueryError | undefined);
+
+  if (loading) {
+    return (
+      <UserJourneyContainer>
+        <LoadingMessage>Loading user details...</LoadingMessage>
+      </UserJourneyContainer>
+    );
+  }
+
+  if (error) {
+    return (
+      <UserJourneyContainer>
+        <ErrorMessage>Error loading user: {errorMessage}</ErrorMessage>
+      </UserJourneyContainer>
+    );
+  }
+
+  if (!user) {
+    return (
+      <UserJourneyContainer>
+        <ErrorMessage>User not found</ErrorMessage>
+      </UserJourneyContainer>
+    );
+  }
 
   return (
     <UserJourneyContainer>
       <UserProfileHeader>
-        <UserName>{userJourney.user.name}</UserName>
-        <UserEmail>{userJourney.user.email}</UserEmail>
+        <UserName>{user.name}</UserName>
+        <UserEmail>{user.email}</UserEmail>
+        <UserID>User ID: {user._id}</UserID>
       </UserProfileHeader>
 
       <UserMetricsSection>
         <UserMetricCard>
-          <UserMetricValue>{userJourney.totalSessions}</UserMetricValue>
+          <UserMetricValue>{userSessions?.session_count || 0}</UserMetricValue>
           <UserMetricLabel>All time sessions</UserMetricLabel>
         </UserMetricCard>
         <UserMetricCard>
@@ -30,19 +74,34 @@ export const UserJourneyTracker: FC = () => {
         <SessionsTable>
           <thead>
             <tr>
-              <th>Session id</th>
+              <th>Session ID</th>
+              <th>Start Time</th>
+              <th>End Time</th>
               <th>Duration</th>
-              <th>Timestamp</th>
+              <th>Device</th>
+              <th>Location</th>
             </tr>
           </thead>
           <tbody>
-            {userJourney.sessions.map((session) => (
-              <tr key={session.sessionId}>
-                <td>{session.sessionId}</td>
-                <td>{session.duration} minutes</td>
-                <td>{session.timestamp}</td>
+            {userSessions?.sessions.map((session) => (
+              <tr key={session.session_id}>
+                <td>{session.session_id}</td>
+                <td>{new Date(session.start_time).toLocaleString()}</td>
+                <td>{new Date(session.end_time).toLocaleString()}</td>
+                <td>
+                  {calculateDuration(session.start_time, session.end_time)}{" "}
+                  minutes
+                </td>
+                <td>{session.device}</td>
+                <td>{session.location}</td>
               </tr>
-            ))}
+            )) || (
+              <tr>
+                <td colSpan={6} style={{ textAlign: "center", color: "#666" }}>
+                  No sessions found
+                </td>
+              </tr>
+            )}
           </tbody>
         </SessionsTable>
       </SessionsSection>
@@ -97,6 +156,13 @@ const UserEmail = styled.p`
   margin: 0;
   color: #666;
   font-size: 16px;
+`;
+
+const UserID = styled.p`
+  margin: 4px 0 0 0;
+  color: #999;
+  font-size: 14px;
+  font-family: monospace;
 `;
 
 const UserMetricsSection = styled.div`
@@ -211,4 +277,18 @@ const EventItem = styled.div`
   border-radius: 4px;
   font-size: 14px;
   color: #333;
+`;
+
+const LoadingMessage = styled.div`
+  text-align: center;
+  padding: 40px;
+  color: #6c757d;
+  font-size: 16px;
+`;
+
+const ErrorMessage = styled.div`
+  text-align: center;
+  padding: 40px;
+  color: #dc3545;
+  font-size: 16px;
 `;

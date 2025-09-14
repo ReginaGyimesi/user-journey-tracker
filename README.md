@@ -189,9 +189,9 @@ User stories:
 Tech used: tba
 
 <div style="display: flex; gap: 10px; align-items: center;">
-  <img src="/assets/dashboard.png" alt="Dashboard page" width="150">
-  <img src="/assets/users.png" alt="Users page" width="150">
-  <img src="/assets/single-user.png" alt="Single user page" width="150">
+  <img src="/assets/dashboard.png" alt="Dashboard page">
+  <img src="/assets/users.png" alt="Users page">
+  <img src="/assets/single-user.png" alt="Single user page">
 </div>
 
 #### L3: Simple Web App (hosted at least locally) with data display/visualization views/pages connected to Backend API (no data entry forms)

@@ -65,13 +65,7 @@ A MERN stack (MongoDB, Express, React, Node.js) application with TypeScript that
 - API: http://localhost:5050
 - API Documentation: http://localhost:5050/api-docs
 
-## Run locally
-
-To run the application locally from the source folder, open a terminal and use:
-
-`./start-dev.sh`
-
-## Chosen tracks
+## Chosen tracks & justifications
 
 ### Database L2
 

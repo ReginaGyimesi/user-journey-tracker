@@ -80,16 +80,18 @@ export const Dashboard: React.FC = () => {
           </thead>
           <tbody>
             {sessions?.map((session) => (
-              <tr key={session.session_id}>
-                <td>{session.session_id}</td>
-                <td>{new Date(session.start_time).toLocaleString()}</td>
-                <td>{new Date(session.end_time).toLocaleString()}</td>
+              <tr key={session._id}>
+                <td>{session._id}</td>
+                <td>{new Date(session.startTime).toLocaleString()}</td>
+                <td>{new Date(session.endTime).toLocaleString()}</td>
                 <td>
-                  {calculateDuration(session.start_time, session.end_time)}{" "}
+                  {calculateDuration(session.startTime, session.endTime)}{" "}
                   minutes
                 </td>
-                <td>{session.device}</td>
-                <td>{session.location}</td>
+                <td>
+                  {session.deviceInfo.browser} on {session.deviceInfo.os}
+                </td>
+                <td>{session.ipAddress}</td>
               </tr>
             )) || (
               <tr>

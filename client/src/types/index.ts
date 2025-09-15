@@ -7,12 +7,15 @@ export interface User {
 }
 
 export interface Session {
-  session_id: string;
-  user_id: string;
-  start_time: string;
-  end_time: string;
-  device: string;
-  location: string;
+  _id: string;
+  userId: string;
+  startTime: string;
+  endTime: string;
+  deviceInfo: {
+    browser: string;
+    os: string;
+  };
+  ipAddress: string;
 }
 
 export interface UserSessionsResponse {

@@ -12,12 +12,15 @@ export interface User {
 }
 
 export interface Session {
-  session_id: string;
-  user_id: string;
-  start_time: string;
-  end_time: string;
-  device: string;
-  location: string;
+  _id: string;
+  userId: string;
+  startTime: string;
+  endTime: string;
+  deviceInfo: {
+    browser: string;
+    os: string;
+  };
+  ipAddress: string;
 }
 
 export interface DashboardStats {
@@ -196,17 +199,22 @@ router.get("/users/:id", async (req, res) => {
  *                   items:
  *                     type: object
  *                     properties:
- *                       session_id:
+ *                       _id:
  *                         type: string
- *                       user_id:
+ *                       userId:
  *                         type: string
- *                       start_time:
+ *                       startTime:
  *                         type: string
- *                       end_time:
+ *                       endTime:
  *                         type: string
- *                       device:
- *                         type: string
- *                       location:
+ *                       deviceInfo:
+ *                         type: object
+ *                         properties:
+ *                           browser:
+ *                             type: string
+ *                           os:
+ *                             type: string
+ *                       ipAddress:
  *                         type: string
  *       404:
  *         description: User not found
@@ -344,8 +352,8 @@ router.get("/dashboard/stats", async (req, res) => {
     let validSessions = 0;
 
     sessions.forEach((session) => {
-      const startTime = new Date(session.start_time);
-      const endTime = new Date(session.end_time);
+      const startTime = new Date(session.startTime);
+      const endTime = new Date(session.endTime);
       const durationMs = endTime.getTime() - startTime.getTime();
       const durationMinutes = durationMs / (1000 * 60); // Convert to minutes
 
@@ -448,22 +456,39 @@ router.get("/users/:id/events", async (req, res) => {
 
     // Get all events for the user, sorted by timestamp (most recent first)
     const eventsCollection = db.collection<Event>("events");
-    
+
     // Debug: Check total events in collection
     const totalEvents = await eventsCollection.countDocuments();
     console.log(`Total events in collection: ${totalEvents}`);
-    
+
     // Debug: Check events for this user
     const events = await eventsCollection
       .find({ user_id: userId })
       .sort({ timestamp: -1 })
       .toArray();
-    
+
     console.log(`Events found for user ${userId}: ${events.length}`);
+
+    // Calculate average time spent from events that have time_spent_seconds
+    let totalTimeSpent = 0;
+    let eventsWithTimeSpent = 0;
+
+    events.forEach((event) => {
+      if (event.metadata.time_spent_seconds) {
+        totalTimeSpent += event.metadata.time_spent_seconds;
+        eventsWithTimeSpent++;
+      }
+    });
+
+    const avgTimeSpentSeconds =
+      eventsWithTimeSpent > 0
+        ? Math.round(totalTimeSpent / eventsWithTimeSpent)
+        : 0;
 
     const response = {
       user_id: userId,
       event_count: events.length,
+      avg_time_spent_seconds: avgTimeSpentSeconds,
       events: events,
     };
 

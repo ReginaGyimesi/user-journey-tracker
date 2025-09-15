@@ -2,6 +2,10 @@
 
 A MERN stack (MongoDB, Express, React, Node.js) application with TypeScript that tracks and visualises user behaviours and journeys on a shopping platform. The system records key user events e.g. session start time, pages visited, purchase count, time spent on pages, and provides searchable insights for individual users.
 
+## Other documents
+
+[Development workbook](docs/development_workbook.md)
+
 ## Installation Guide
 
 ### Prerequisites
@@ -168,7 +172,7 @@ Although Amazon DocumentDB is also MongoDB compatible, I found that Atlas offers
 
 ---
 
-### Frontend L4
+### Frontend L3
 
 #### L1: Basic and sample wireframes to provide the idea (pages/views) with some user stories
 
@@ -188,8 +192,8 @@ User stories:
 
 Tech used: tba
 
-| Dashboard page | Users page | Single user page |
-|----------------|------------|------------------|
+| Dashboard page                           | Users page                       | Single user page                             |
+| ---------------------------------------- | -------------------------------- | -------------------------------------------- |
 | ![Dashboard page](/assets/dashboard.png) | ![Users page](/assets/users.png) | ![Single user page](/assets/single-user.png) |
 
 #### L3: Simple Web App (hosted at least locally) with data display/visualization views/pages connected to Backend API (no data entry forms)

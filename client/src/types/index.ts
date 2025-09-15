@@ -44,6 +44,7 @@ export interface UserEventsResponse {
   user_id: string;
   event_count: number;
   avg_time_spent_seconds: number;
+  all_time_purchases: number;
   events: Event[];
 }
 

@@ -228,7 +228,7 @@ router.get("/users/:id/sessions", async (req, res) => {
     let sessionsCollection = db.collection<Session>("sessions");
 
     // Get all sessions for the user
-    let sessions = await sessionsCollection.find({ user_id: userId }).toArray();
+    let sessions = await sessionsCollection.find({ userId: userId }).toArray();
 
     // Get user info to verify user exists
     let usersCollection = db.collection<User>("users");
@@ -445,7 +445,6 @@ router.get("/users/:id/events", async (req, res) => {
     const userId = req.params.id;
     const db = await connectToDatabase();
 
-    // Get user info to verify user exists
     const usersCollection = db.collection<User>("users");
     const user = await usersCollection.findOne({ _id: userId });
 
@@ -454,20 +453,13 @@ router.get("/users/:id/events", async (req, res) => {
       return;
     }
 
-    // Get all events for the user, sorted by timestamp (most recent first)
+    // Get all events for the user
     const eventsCollection = db.collection<Event>("events");
 
-    // Debug: Check total events in collection
-    const totalEvents = await eventsCollection.countDocuments();
-    console.log(`Total events in collection: ${totalEvents}`);
-
-    // Debug: Check events for this user
     const events = await eventsCollection
       .find({ user_id: userId })
       .sort({ timestamp: -1 })
       .toArray();
-
-    console.log(`Events found for user ${userId}: ${events.length}`);
 
     // Calculate average time spent from events that have time_spent_seconds
     let totalTimeSpent = 0;
@@ -485,10 +477,15 @@ router.get("/users/:id/events", async (req, res) => {
         ? Math.round(totalTimeSpent / eventsWithTimeSpent)
         : 0;
 
+    let purchaseCount = events.filter(
+      (event) => event.event_type === "PURCHASE"
+    ).length;
+
     const response = {
       user_id: userId,
       event_count: events.length,
       avg_time_spent_seconds: avgTimeSpentSeconds,
+      all_time_purchases: purchaseCount,
       events: events,
     };
 

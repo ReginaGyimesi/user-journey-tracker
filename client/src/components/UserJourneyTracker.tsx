@@ -1,5 +1,5 @@
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
-import { FC } from "react";
+import React, { FC } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { useApiError } from "../hooks/useApiError";
@@ -10,6 +10,7 @@ import {
 } from "../store/api";
 import { SessionsTable } from "./common/SessionsTable";
 import { MetricCardsSection } from "./common/MetricCardsSection";
+import { getRecentSessionEvents } from "../utils/helpers";
 
 export const UserJourneyTracker: FC = () => {
   const { userId } = useParams<{ userId: string }>();
@@ -40,12 +41,18 @@ export const UserJourneyTracker: FC = () => {
     { key: userEvents?.event_count || 0, label: "All time events" },
     {
       key: userEvents?.avg_time_spent_seconds
-        ? Math.round(userEvents.avg_time_spent_seconds / 60)
+        ? (userEvents.avg_time_spent_seconds / 60).toFixed(2)
         : 0,
       label: "Avg. minutes spent",
     },
-    { key: 0, label: "All time purchases" },
+    { key: userEvents?.all_time_purchases, label: "All time purchases" },
   ];
+
+  const { recentEvent, sessionEvents } = getRecentSessionEvents(
+    userEvents?.events
+  );
+
+  console.log(sessionEvents);
 
   if (loading) {
     return (
@@ -92,31 +99,23 @@ export const UserJourneyTracker: FC = () => {
 
       <RecentEventSection>
         <SectionTitle>
-          Most recent event:{" "}
-          {userEvents?.events[0]
-            ? new Date(userEvents.events[0].timestamp).toLocaleString()
-            : "No events found"}
+          Most recent session:{" "}
+          {recentEvent
+            ? new Date(recentEvent.timestamp).toLocaleString()
+            : "No session started"}
         </SectionTitle>
-        {userEvents?.events[0] && (
-          <JourneyFlow>
-            <FlowStep>{userEvents.events[0].event_type}</FlowStep>
-            {userEvents.events[0].metadata.page_id && (
-              <>
-                <FlowArrow>→</FlowArrow>
-                <FlowStep>
-                  Page: {userEvents.events[0].metadata.page_id}
-                </FlowStep>
-              </>
-            )}
-            {userEvents.events[0].metadata.time_spent_seconds && (
-              <>
-                <FlowArrow>→</FlowArrow>
-                <FlowStep>
-                  {userEvents.events[0].metadata.time_spent_seconds}s spent
-                </FlowStep>
-              </>
-            )}
-          </JourneyFlow>
+
+        {sessionEvents.length > 1 && (
+          <SessionEventsSection>
+            <JourneyFlow>
+              {sessionEvents.map((event, index) => (
+                <React.Fragment key={event._id}>
+                  <FlowStep>{event.event_type}</FlowStep>
+                  {index < sessionEvents.length - 1 && <FlowArrow>→</FlowArrow>}
+                </React.Fragment>
+              ))}
+            </JourneyFlow>
+          </SessionEventsSection>
         )}
       </RecentEventSection>
 
@@ -207,6 +206,7 @@ const RecentEventSection = styled.div`
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   margin-bottom: 30px;
+  margin-top: 30px;
 `;
 
 const JourneyFlow = styled.div`
@@ -272,4 +272,8 @@ const ErrorMessage = styled.div`
   padding: 40px;
   color: #dc3545;
   font-size: 16px;
+`;
+
+const SessionEventsSection = styled.div`
+  margin-top: 20px;
 `;

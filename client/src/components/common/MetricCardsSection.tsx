@@ -3,7 +3,7 @@ import { styled } from "styled-components";
 
 type Props = {
   statsLoading: boolean;
-  stats: { key: number | undefined; label: string }[];
+  stats: { key: string | number | undefined; label: string }[];
 };
 
 export const MetricCardsSection: FC<Props> = ({ statsLoading, stats }) => {

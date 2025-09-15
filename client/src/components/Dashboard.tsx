@@ -6,41 +6,27 @@ import {
   useGetDashboardStatsQuery,
 } from "../store/api";
 import { calculateDuration } from "../utils/helpers";
+import { MetricCardsSection } from "./common/MetricCardsSection";
 
 export const Dashboard: React.FC = () => {
   const { data: dashboardStats, isLoading: statsLoading } =
     useGetDashboardStatsQuery();
   const { data: sessions } = useGetAllSessionsQuery();
 
+  const metrics = [
+    { key: dashboardStats?.allTimeUsers, label: "All time users" },
+    { key: dashboardStats?.allTimeSessions, label: "All time sessions" },
+    {
+      key: dashboardStats?.allTimePurchases,
+      label: "All time number of items purchased",
+    },
+    { key: dashboardStats?.avgMinutesSpent, label: "Average minutes spent" },
+  ];
+
   return (
     <DashboardContainer>
       <SectionTitle>Dashboard</SectionTitle>
-      <MetricsSection>
-        <MetricCard>
-          <MetricValue>
-            {statsLoading ? "..." : dashboardStats?.allTimeUsers || 0}
-          </MetricValue>
-          <MetricLabel>All time users</MetricLabel>
-        </MetricCard>
-        <MetricCard>
-          <MetricValue>
-            {statsLoading ? "..." : dashboardStats?.allTimeSessions || 0}
-          </MetricValue>
-          <MetricLabel>All time sessions</MetricLabel>
-        </MetricCard>
-        <MetricCard>
-          <MetricValue>
-            {statsLoading ? "..." : dashboardStats?.allTimePurchases || 0}
-          </MetricValue>
-          <MetricLabel>All time number of items purchased</MetricLabel>
-        </MetricCard>
-        <MetricCard>
-          <MetricValue>
-            {statsLoading ? "..." : dashboardStats?.avgMinutesSpent || 0}
-          </MetricValue>
-          <MetricLabel>Average minutes spent</MetricLabel>
-        </MetricCard>
-      </MetricsSection>
+      <MetricCardsSection stats={metrics} statsLoading={statsLoading} />
 
       <ChartsSection>
         <ChartContainer>
@@ -124,33 +110,6 @@ const SectionTitle = styled.h2`
 const SubsectionTitle = styled.h3`
   margin: 0 0 20px 0;
   color: #333;
-`;
-
-const MetricsSection = styled.div`
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-  margin-bottom: 30px;
-`;
-
-const MetricCard = styled.div`
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  text-align: center;
-`;
-
-const MetricValue = styled.div`
-  font-size: 2rem;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 8px;
-`;
-
-const MetricLabel = styled.div`
-  font-size: 14px;
-  color: #666;
 `;
 
 const ChartsSection = styled.div`

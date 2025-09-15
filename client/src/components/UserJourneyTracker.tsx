@@ -9,6 +9,7 @@ import {
   useGetUserSessionsQuery,
 } from "../store/api";
 import { calculateDuration } from "../utils/helpers";
+import { MetricCardsSection } from "./common/MetricCardsSection";
 
 export const UserJourneyTracker: FC = () => {
   const { userId } = useParams<{ userId: string }>();
@@ -33,6 +34,18 @@ export const UserJourneyTracker: FC = () => {
   const loading = userLoading || sessionsLoading || eventsLoading;
   const error = userError || sessionsError || eventsError;
   const errorMessage = useApiError(error as FetchBaseQueryError | undefined);
+
+  const metrics = [
+    { key: userSessions?.session_count || 0, label: "All time sessions" },
+    { key: userEvents?.event_count || 0, label: "All time events" },
+    {
+      key: userEvents?.avg_time_spent_seconds
+        ? Math.round(userEvents.avg_time_spent_seconds / 60)
+        : 0,
+      label: "Avg. minutes spent",
+    },
+    { key: 0, label: "All time purchases" },
+  ];
 
   if (loading) {
     return (
@@ -66,28 +79,10 @@ export const UserJourneyTracker: FC = () => {
         <UserID>User ID: {user._id}</UserID>
       </UserProfileHeader>
 
-      <UserMetricsSection>
-        <UserMetricCard>
-          <UserMetricValue>{userSessions?.session_count || 0}</UserMetricValue>
-          <UserMetricLabel>All time sessions</UserMetricLabel>
-        </UserMetricCard>
-        <UserMetricCard>
-          <UserMetricValue>{userEvents?.event_count || 0}</UserMetricValue>
-          <UserMetricLabel>All time events</UserMetricLabel>
-        </UserMetricCard>
-        <UserMetricCard>
-          <UserMetricValue>
-            {userEvents?.avg_time_spent_seconds
-              ? Math.round(userEvents.avg_time_spent_seconds / 60)
-              : 0}
-          </UserMetricValue>
-          <UserMetricLabel>Avg. minutes spent</UserMetricLabel>
-        </UserMetricCard>
-        <UserMetricCard>
-          <UserMetricValue>{0}</UserMetricValue>
-          <UserMetricLabel>All time purchases</UserMetricLabel>
-        </UserMetricCard>
-      </UserMetricsSection>
+      <MetricCardsSection
+        stats={metrics}
+        statsLoading={sessionsLoading || eventsLoading}
+      />
 
       <SessionsSection>
         <SectionTitle>All time sessions</SectionTitle>

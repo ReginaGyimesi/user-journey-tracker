@@ -5,7 +5,7 @@ import {
   useGetAllSessionsQuery,
   useGetDashboardStatsQuery,
 } from "../store/api";
-import { calculateDuration } from "../utils/helpers";
+import { SessionsTable } from "./common/SessionsTable";
 import { MetricCardsSection } from "./common/MetricCardsSection";
 
 export const Dashboard: React.FC = () => {
@@ -51,44 +51,11 @@ export const Dashboard: React.FC = () => {
         </ChartContainer>
       </ChartsSection>
 
-      <RecentSessionsSection>
-        <SubsectionTitle>Recent sessions</SubsectionTitle>
-        <SessionsTable>
-          <thead>
-            <tr>
-              <th>Session ID</th>
-              <th>Start Time</th>
-              <th>End Time</th>
-              <th>Duration</th>
-              <th>Device</th>
-              <th>Location</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sessions?.map((session) => (
-              <tr key={session._id}>
-                <td>{session._id}</td>
-                <td>{new Date(session.startTime).toLocaleString()}</td>
-                <td>{new Date(session.endTime).toLocaleString()}</td>
-                <td>
-                  {calculateDuration(session.startTime, session.endTime)}{" "}
-                  minutes
-                </td>
-                <td>
-                  {session.deviceInfo.browser} on {session.deviceInfo.os}
-                </td>
-                <td>{session.ipAddress}</td>
-              </tr>
-            )) || (
-              <tr>
-                <td colSpan={6} style={{ textAlign: "center", color: "#666" }}>
-                  No sessions found
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </SessionsTable>
-      </RecentSessionsSection>
+      <SessionsTable
+        sessions={sessions || []}
+        title="Recent sessions"
+        showUserColumn={true}
+      />
     </DashboardContainer>
   );
 };
@@ -150,33 +117,4 @@ const BarValue = styled.span`
   color: white;
   font-size: 12px;
   font-weight: bold;
-`;
-
-const RecentSessionsSection = styled.div`
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-`;
-
-const SessionsTable = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-
-  th,
-  td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #e0e0e0;
-  }
-
-  th {
-    background-color: #f8f9fa;
-    font-weight: 600;
-    color: #333;
-  }
-
-  tr:hover {
-    background-color: #f8f9fa;
-  }
 `;

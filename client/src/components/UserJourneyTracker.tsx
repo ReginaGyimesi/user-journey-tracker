@@ -8,7 +8,7 @@ import {
   useGetUserEventsQuery,
   useGetUserSessionsQuery,
 } from "../store/api";
-import { calculateDuration } from "../utils/helpers";
+import { SessionsTable } from "./common/SessionsTable";
 import { MetricCardsSection } from "./common/MetricCardsSection";
 
 export const UserJourneyTracker: FC = () => {
@@ -84,44 +84,11 @@ export const UserJourneyTracker: FC = () => {
         statsLoading={sessionsLoading || eventsLoading}
       />
 
-      <SessionsSection>
-        <SectionTitle>All time sessions</SectionTitle>
-        <SessionsTable>
-          <thead>
-            <tr>
-              <th>Session ID</th>
-              <th>Start Time</th>
-              <th>End Time</th>
-              <th>Duration</th>
-              <th>Device</th>
-              <th>Location</th>
-            </tr>
-          </thead>
-          <tbody>
-            {userSessions?.sessions.map((session) => (
-              <tr key={session._id}>
-                <td>{session._id}</td>
-                <td>{new Date(session.startTime).toLocaleString()}</td>
-                <td>{new Date(session.endTime).toLocaleString()}</td>
-                <td>
-                  {calculateDuration(session.startTime, session.endTime)}{" "}
-                  minutes
-                </td>
-                <td>
-                  {session.deviceInfo.browser} on {session.deviceInfo.os}
-                </td>
-                <td>{session.ipAddress}</td>
-              </tr>
-            )) || (
-              <tr>
-                <td colSpan={6} style={{ textAlign: "center", color: "#666" }}>
-                  No sessions found
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </SessionsTable>
-      </SessionsSection>
+      <SessionsTable
+        sessions={userSessions?.sessions || []}
+        title="All time sessions"
+        showUserColumn={false}
+      />
 
       <RecentEventSection>
         <SectionTitle>
@@ -228,67 +195,10 @@ const UserID = styled.p`
   font-family: monospace;
 `;
 
-const UserMetricsSection = styled.div`
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-  margin-bottom: 30px;
-`;
-
-const UserMetricCard = styled.div`
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  text-align: center;
-`;
-
-const UserMetricValue = styled.div`
-  font-size: 2rem;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 8px;
-`;
-
-const UserMetricLabel = styled.div`
-  font-size: 14px;
-  color: #666;
-`;
-
-const SessionsSection = styled.div`
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  margin-bottom: 30px;
-`;
-
 const SectionTitle = styled.h3`
   margin: 0 0 20px 0;
   color: #333;
   font-size: 18px;
-`;
-
-const SessionsTable = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-
-  th,
-  td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #e0e0e0;
-  }
-
-  th {
-    background-color: #f8f9fa;
-    font-weight: 600;
-    color: #333;
-  }
-
-  tr:hover {
-    background-color: #f8f9fa;
-  }
 `;
 
 const RecentEventSection = styled.div`

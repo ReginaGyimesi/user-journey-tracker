@@ -48,9 +48,7 @@ export const UserJourney: FC = () => {
       label: t("userJourney.allTimeEvents"),
     },
     {
-      key: userEvents?.avg_time_spent_seconds
-        ? (userEvents.avg_time_spent_seconds / 60).toFixed(2)
-        : 0,
+      key: userSessions?.session_avg_time ? userSessions.session_avg_time : 0,
       label: t("userJourney.avgMinutesSpent"),
     },
     {

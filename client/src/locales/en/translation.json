@@ -51,8 +51,8 @@
     "timestamp": "Timestamp",
     "sessionId": "Session ID",
     "pageItem": "Page/Item",
-    "timeSpent": "Time Spent",
-    "searchQuery": "Search Query",
+    "timeSpent": "Time spent",
+    "searchQuery": "Search query",
     "noEventsFound": "No events found"
   },
   "common": {

@@ -21,6 +21,7 @@ export interface Session {
 export interface UserSessionsResponse {
   user_id: string;
   session_count: number;
+  session_avg_time: number;
   sessions: Session[];
 }
 

@@ -263,6 +263,8 @@ router.get("/users/:id/events", async (req, res) => {
  *                   type: string
  *                 session_count:
  *                   type: number
+ *                 session_avg_time:
+ *                   type: number
  *                 sessions:
  *                   type: array
  *                   items:
@@ -308,9 +310,29 @@ router.get("/users/:id/sessions", async (req, res) => {
       return;
     }
 
+    // Calculate average minutes spent from sessions
+    let totalMinutes = 0;
+    let validSessions = 0;
+
+    sessions.forEach((session) => {
+      const startTime = new Date(session.startTime);
+      const endTime = new Date(session.endTime);
+      const durationMs = endTime.getTime() - startTime.getTime();
+      const durationMinutes = durationMs / (1000 * 60);
+
+      if (durationMinutes > 0 && durationMinutes < 1440) {
+        totalMinutes += durationMinutes;
+        validSessions++;
+      }
+    });
+
+    const avgMinutesSpent =
+      validSessions > 0 ? Math.round(totalMinutes / validSessions) : 0;
+
     const response = {
       user_id: userId,
       session_count: sessions.length,
+      session_avg_time: avgMinutesSpent,
       sessions: sessions,
     };
 

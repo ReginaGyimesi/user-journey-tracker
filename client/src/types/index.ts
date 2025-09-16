@@ -62,3 +62,14 @@ export interface DashboardMetrics {
   allTimePurchases: number;
   avgMinutesSpent: number;
 }
+
+export interface RevenueData {
+  _id: {
+    year: number;
+    month: number;
+    day: number;
+  };
+  totalRevenue: number;
+  purchaseCount: number;
+  date: string;
+}

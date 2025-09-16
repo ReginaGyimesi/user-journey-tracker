@@ -46,9 +46,6 @@ export interface Event {
   };
 }
 
-// router is an instance of the express router.
-// We use it to define our routes.
-// The router will be added as a middleware and will take control of requests starting with path /users.
 const router = express.Router();
 
 /**
@@ -342,9 +339,13 @@ router.get("/dashboard/stats", async (req, res) => {
     const sessionsCollection = db.collection<Session>("sessions");
     const allTimeSessions = await sessionsCollection.countDocuments();
 
-    // For now, we'll use mock data for purchases since we don't have a purchases collection
-    // In a real application, you would have a purchases collection
-    const allTimePurchases = 1367; // This should come from a purchases collection
+    // Get all events
+    const eventsCollection = db.collection<Session>("events");
+
+    // Find all PURCHASE events
+    const allTimePurchases = await eventsCollection.countDocuments({
+      event_type: "PURCHASE",
+    });
 
     // Calculate average minutes spent from sessions
     const sessions = await sessionsCollection.find({}).toArray();
@@ -493,6 +494,98 @@ router.get("/users/:id/events", async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).send("Error fetching user events");
+  }
+});
+
+/**
+ * @swagger
+ * /api/analytics/revenue:
+ *   get:
+ *     summary: Get revenue analytics over time
+ *     description: Retrieve aggregated revenue data grouped by date from purchase events
+ *     tags: [Analytics]
+ *     responses:
+ *       200:
+ *         description: Revenue analytics retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   _id:
+ *                     type: object
+ *                     properties:
+ *                       year:
+ *                         type: number
+ *                         example: 2025
+ *                       month:
+ *                         type: number
+ *                         example: 9
+ *                       day:
+ *                         type: number
+ *                         example: 1
+ *                   totalRevenue:
+ *                     type: number
+ *                     description: Total revenue for the day
+ *                     example: 848.29
+ *                   purchaseCount:
+ *                     type: number
+ *                     description: Number of purchases for the day
+ *                     example: 5
+ *                   date:
+ *                     type: string
+ *                     format: date
+ *                     description: The date in ISO format
+ *                     example: "2025-09-01T00:00:00.000Z"
+ *       500:
+ *         $ref: '#/components/responses/ErrorResponse'
+ */
+router.get("/analytics/revenue", async (req, res) => {
+  try {
+    const db = await connectToDatabase();
+    const eventsCollection = db.collection<Event>("events");
+
+    const revenueOverTime = await eventsCollection
+      .aggregate([
+        {
+          $match: { event_type: "PURCHASE" },
+        },
+        {
+          $group: {
+            _id: {
+              year: { $year: { $toDate: "$timestamp" } },
+              month: { $month: { $toDate: "$timestamp" } },
+              day: { $dayOfMonth: { $toDate: "$timestamp" } },
+            },
+            totalRevenue: { $sum: "$metadata.price" },
+            purchaseCount: { $sum: 1 },
+          },
+        },
+        {
+          $sort: { "_id.year": 1, "_id.month": 1, "_id.day": 1 },
+        },
+        {
+          $project: {
+            date: {
+              $dateFromParts: {
+                year: "$_id.year",
+                month: "$_id.month",
+                day: "$_id.day",
+              },
+            },
+            totalRevenue: 1,
+            purchaseCount: 1,
+          },
+        },
+      ])
+      .toArray();
+
+    res.json(revenueOverTime);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error fetching revenue data");
   }
 });
 

@@ -10,7 +10,7 @@ export const MetricCardsSection: FC<Props> = ({ statsLoading, stats }) => {
   return (
     <MetricsSection>
       {stats.map(({ key, label }) => (
-        <MetricCard key={key}>
+        <MetricCard key={label}>
           <MetricValue>{statsLoading ? "..." : key || 0}</MetricValue>
           <MetricLabel>{label}</MetricLabel>
         </MetricCard>

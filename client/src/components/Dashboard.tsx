@@ -4,14 +4,17 @@ import { mockChartData } from "../data/mockData";
 import {
   useGetAllSessionsQuery,
   useGetDashboardStatsQuery,
+  useGetRevenueOverTimeQuery,
 } from "../store/api";
 import { SessionsTable } from "./common/SessionsTable";
 import { MetricCardsSection } from "./common/MetricCardsSection";
+import RevenueLineChart from "./common/RevenueLinceChart";
 
 export const Dashboard: React.FC = () => {
   const { data: dashboardStats, isLoading: statsLoading } =
     useGetDashboardStatsQuery();
   const { data: sessions } = useGetAllSessionsQuery();
+  const { data: revenueOverTime } = useGetRevenueOverTimeQuery();
 
   const metrics = [
     { key: dashboardStats?.allTimeUsers, label: "All time users" },
@@ -23,6 +26,8 @@ export const Dashboard: React.FC = () => {
     { key: dashboardStats?.avgMinutesSpent, label: "Average minutes spent" },
   ];
 
+  console.log(revenueOverTime);
+
   return (
     <DashboardContainer>
       <SectionTitle>Dashboard</SectionTitle>
@@ -30,14 +35,8 @@ export const Dashboard: React.FC = () => {
 
       <ChartsSection>
         <ChartContainer>
-          <SubsectionTitle>User Activity</SubsectionTitle>
-          <BarChart>
-            {mockChartData.map((item, index) => (
-              <Bar key={index} height={item.value / 10}>
-                <BarValue>{item.value}</BarValue>
-              </Bar>
-            ))}
-          </BarChart>
+          <SubsectionTitle>Revenue KPI</SubsectionTitle>
+          <RevenueLineChart data={revenueOverTime} />
         </ChartContainer>
         <ChartContainer>
           <SubsectionTitle>Session Trends</SubsectionTitle>

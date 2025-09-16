@@ -43,7 +43,7 @@ export const UserJourneyTracker: FC = () => {
       key: userEvents?.avg_time_spent_seconds
         ? (userEvents.avg_time_spent_seconds / 60).toFixed(2)
         : 0,
-      label: "Avg. minutes spent",
+      label: "Average minutes spent",
     },
     { key: userEvents?.all_time_purchases, label: "All time purchases" },
   ];
@@ -51,8 +51,6 @@ export const UserJourneyTracker: FC = () => {
   const { recentEvent, sessionEvents } = getRecentSessionEvents(
     userEvents?.events
   );
-
-  console.log(sessionEvents);
 
   if (loading) {
     return (

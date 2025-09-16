@@ -1,4 +1,4 @@
-import { Event, UserEventsResponse } from "../types";
+import { Event } from "../types";
 
 // Helper function to calculate session duration in minutes
 export const calculateDuration = (

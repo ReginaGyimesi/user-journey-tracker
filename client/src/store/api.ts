@@ -5,6 +5,7 @@ import {
   UserSessionsResponse,
   UserEventsResponse,
   DashboardMetrics,
+  RevenueData,
 } from "../types";
 
 // Define the base query with the API base URL
@@ -59,6 +60,11 @@ export const apiSlice = createApi({
       query: () => "/dashboard/stats",
       providesTags: ["DashboardStats"],
     }),
+
+    // Get revenue overtime
+    getRevenueOverTime: builder.query<RevenueData[], void>({
+      query: () => "/analytics/revenue",
+    }),
   }),
 });
 
@@ -70,4 +76,5 @@ export const {
   useGetAllSessionsQuery,
   useGetUserEventsQuery,
   useGetDashboardStatsQuery,
+  useGetRevenueOverTimeQuery,
 } = apiSlice;

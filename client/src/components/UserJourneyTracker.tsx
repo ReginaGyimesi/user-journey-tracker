@@ -7,7 +7,7 @@ import {
   useGetUserByIdQuery,
   useGetUserEventsQuery,
   useGetUserSessionsQuery,
-} from "../store/api";
+} from "../store/api/users";
 import { SessionsTable } from "./common/SessionsTable";
 import { MetricCardsSection } from "./common/MetricCardsSection";
 import { getRecentSessionEvents } from "../utils/helpers";

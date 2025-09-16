@@ -185,4 +185,87 @@ router.get("/analytics/revenue", async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/analytics/daily-active-users:
+ *   get:
+ *     summary: Get daily active users analytics
+ *     description: Retrieve daily active users data grouped by date from sessions
+ *     tags: [Analytics]
+ *     responses:
+ *       200:
+ *         description: Daily active users analytics retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   _id:
+ *                     type: object
+ *                     properties:
+ *                       year:
+ *                         type: number
+ *                         example: 2025
+ *                       month:
+ *                         type: number
+ *                         example: 9
+ *                       day:
+ *                         type: number
+ *                         example: 1
+ *                   activeUsers:
+ *                     type: number
+ *                     description: Number of unique active users for the day
+ *                     example: 15
+ *                   date:
+ *                     type: string
+ *                     format: date
+ *                     description: The date in ISO format
+ *                     example: "2025-09-01T00:00:00.000Z"
+ *       500:
+ *         $ref: '#/components/responses/ErrorResponse'
+ */
+router.get("/analytics/daily-active-users", async (req, res) => {
+  try {
+    const db = await connectToDatabase();
+    const sessionsCollection = db.collection<Session>("sessions");
+
+    const dailyActiveUsers = await sessionsCollection
+      .aggregate([
+        {
+          $group: {
+            _id: {
+              year: { $year: { $toDate: "$startTime" } },
+              month: { $month: { $toDate: "$startTime" } },
+              day: { $dayOfMonth: { $toDate: "$startTime" } },
+            },
+            activeUsers: { $addToSet: "$userId" },
+          },
+        },
+        {
+          $project: {
+            activeUsers: { $size: "$activeUsers" },
+            date: {
+              $dateFromParts: {
+                year: "$_id.year",
+                month: "$_id.month",
+                day: "$_id.day",
+              },
+            },
+          },
+        },
+        {
+          $sort: { date: 1 },
+        },
+      ])
+      .toArray();
+
+    res.json(dailyActiveUsers);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error fetching daily active users data");
+  }
+});
+
 export default router;

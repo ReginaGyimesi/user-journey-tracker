@@ -73,3 +73,13 @@ export interface RevenueData {
   purchaseCount: number;
   date: string;
 }
+
+export interface DailyActiveUsersData {
+  _id: {
+    year: number;
+    month: number;
+    day: number;
+  };
+  activeUsers: number;
+  date: string;
+}

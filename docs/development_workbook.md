@@ -98,9 +98,11 @@
 - FE needs refactoring
 - Endpoints and calculations need to be refined
 
+---
+
 ## Midway check in, what do I need?
 
-Minimum requirements for myself:
+Minimum requirements for MVP:
 
 - Refactor FE
 - Add diagrams on the Dashboard page
@@ -114,6 +116,8 @@ If time allows:
 
 - Read more about deployment to AWS
 -
+
+---
 
 ## Date: 2025-09-16
 

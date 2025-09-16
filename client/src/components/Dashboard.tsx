@@ -1,19 +1,26 @@
 import React from "react";
 import styled from "styled-components";
-import {
-  useGetAllSessionsQuery,
-  useGetDashboardStatsQuery,
-  useGetRevenueOverTimeQuery,
-} from "../store/api";
+import { useGetAllSessionsQuery } from "../store/api/users";
 import { MetricCardsSection } from "./common/MetricCardsSection";
 import RevenueLineChart from "./common/RevenueLineChart";
+import DailyActiveUsersChart from "./common/DailyActiveUsersChart";
 import { SessionsTable } from "./common/SessionsTable";
+import {
+  useGetDailyActiveUsersQuery,
+  useGetDashboardStatsQuery,
+  useGetRevenueOverTimeQuery,
+} from "../store/api/analytics";
 
 export const Dashboard: React.FC = () => {
   const { data: dashboardStats, isLoading: statsLoading } =
     useGetDashboardStatsQuery();
   const { data: sessions } = useGetAllSessionsQuery();
   const { data: revenueOverTime } = useGetRevenueOverTimeQuery();
+  const {
+    data: dailyActiveUsers,
+    isLoading: dailyActiveUsersLoading,
+    error: dailyActiveUsersError,
+  } = useGetDailyActiveUsersQuery();
 
   const metrics = [
     { key: dashboardStats?.allTimeUsers, label: "All time users" },
@@ -24,8 +31,6 @@ export const Dashboard: React.FC = () => {
     },
     { key: dashboardStats?.avgMinutesSpent, label: "Average minutes spent" },
   ];
-
-  console.log(revenueOverTime);
 
   return (
     <DashboardContainer>
@@ -38,14 +43,17 @@ export const Dashboard: React.FC = () => {
           <RevenueLineChart data={revenueOverTime} />
         </ChartContainer>
         <ChartContainer>
-          {/* <SubsectionTitle>Session Trends</SubsectionTitle>
-          <BarChart>
-            {mockChartData.map((item, index) => (
-              <Bar key={index} height={item.value / 8}>
-                <BarValue>{item.value}</BarValue>
-              </Bar>
-            ))}
-          </BarChart> */}
+          <SubsectionTitle>Daily Active Users</SubsectionTitle>
+          {dailyActiveUsersLoading ? (
+            <div>Loading daily active users data...</div>
+          ) : dailyActiveUsersError ? (
+            <div>
+              Error loading daily active users data:{" "}
+              {JSON.stringify(dailyActiveUsersError)}
+            </div>
+          ) : (
+            <DailyActiveUsersChart data={dailyActiveUsers} />
+          )}
         </ChartContainer>
       </ChartsSection>
 

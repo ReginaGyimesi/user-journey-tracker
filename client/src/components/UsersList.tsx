@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { useGetUsersQuery } from "../store/api";
+import { useGetUsersQuery } from "../store/api/users";
 import { useApiError } from "../hooks/useApiError";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 

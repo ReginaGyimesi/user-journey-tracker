@@ -199,3 +199,9 @@ Tech used: tba
 #### L3: Simple Web App (hosted at least locally) with data display/visualization views/pages connected to Backend API (no data entry forms)
 
 TBA gif or video
+
+## Bonus challenge
+
+### Localisation on the client side
+
+Justification TBA

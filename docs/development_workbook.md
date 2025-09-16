@@ -104,18 +104,19 @@
 
 Minimum requirements for MVP:
 
-- Refactor FE
-- Add diagrams on the Dashboard page
-- Refine endpoints and calculations
-- Make a Postman call to API (although CURL works)
-- Implement search and think about how would it be best to do the search from a db point of view
-- Implement the challenge - localisation to Hungarian language on the client side (and maybe server side, too?)
+- Refactor FE ✅
+- Add diagrams on the Dashboard page ✅
+- Refine endpoints and calculations ✅
+- Make a Postman call to API (although cURL works)
+- Implement search and think about how would it be best to do the search from an efficieny point of view
+- Implement the challenge - localisation to Hungarian language on the client side (and maybe server side, too?) ✅
 - Add cloud diagram
+- Documentation and justifications
 
 If time allows:
 
 - Read more about deployment to AWS
--
+- Read more about event sourcing
 
 ---
 

@@ -1,5 +1,6 @@
 import { FC } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import { useGetUsersQuery } from "../store/api/users";
 import { useApiError } from "../hooks/useApiError";
@@ -7,23 +8,24 @@ import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 
 export const UsersList: FC = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { data: users, isLoading: loading, error } = useGetUsersQuery();
   const errorMessage = useApiError(error as FetchBaseQueryError | undefined);
 
   return (
     <UsersListContainer>
-      <SectionTitle>Users</SectionTitle>
+      <SectionTitle>{t('users.title')}</SectionTitle>
       <UsersSection>
         {loading ? (
-          <LoadingMessage>Loading users...</LoadingMessage>
+          <LoadingMessage>{t('users.loadingUsers')}</LoadingMessage>
         ) : error ? (
-          <ErrorMessage>Error loading users: {errorMessage}</ErrorMessage>
+          <ErrorMessage>{t('users.errorLoadingUsers')} {errorMessage}</ErrorMessage>
         ) : (
           <UsersTable>
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Email</th>
+                <th>{t('users.name')}</th>
+                <th>{t('users.email')}</th>
               </tr>
             </thead>
             <tbody>

@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import { Session } from "../../types";
 import { calculateDuration } from "../../utils/helpers";
@@ -16,11 +17,12 @@ export const SessionsTable: React.FC<SessionsTableProps> = ({
   showUserColumn = false,
 }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   if (!sessions || sessions.length === 0) {
     return (
       <SessionsTableContainer>
         {title && <SectionTitle>{title}</SectionTitle>}
-        <EmptyMessage>No sessions found</EmptyMessage>
+        <EmptyMessage>{t('sessions.noSessionsFound')}</EmptyMessage>
       </SessionsTableContainer>
     );
   }
@@ -31,13 +33,13 @@ export const SessionsTable: React.FC<SessionsTableProps> = ({
       <Table>
         <thead>
           <tr>
-            <th>Session ID</th>
-            {showUserColumn && <th>User ID</th>}
-            <th>Start Time</th>
-            <th>End Time</th>
-            <th>Duration</th>
-            <th>Device</th>
-            <th>IP Address</th>
+            <th>{t('sessions.sessionId')}</th>
+            {showUserColumn && <th>{t('sessions.userId')}</th>}
+            <th>{t('sessions.startTime')}</th>
+            <th>{t('sessions.endTime')}</th>
+            <th>{t('sessions.duration')}</th>
+            <th>{t('sessions.device')}</th>
+            <th>{t('sessions.ipAddress')}</th>
           </tr>
         </thead>
         <tbody>
@@ -54,7 +56,7 @@ export const SessionsTable: React.FC<SessionsTableProps> = ({
               <td>{new Date(session.startTime).toLocaleString()}</td>
               <td>{new Date(session.endTime).toLocaleString()}</td>
               <td>
-                {calculateDuration(session.startTime, session.endTime)} minutes
+                {calculateDuration(session.startTime, session.endTime)} {t('sessions.minutes')}
               </td>
               <td>
                 {session.deviceInfo.browser} on {session.deviceInfo.os}

@@ -1,0 +1,63 @@
+{
+  "navigation": {
+    "dashboard": "Irányítópult",
+    "users": "Felhasználók",
+    "userJourneyTracker": "User journey tracker",
+    "search": "Keresés"
+  },
+  "dashboard": {
+    "title": "Irányítópult",
+    "allTimeUsers": "Összes felhasználó",
+    "allTimeSessions": "Összes munkamenet",
+    "allTimePurchases": "Összes vásárolt tétel",
+    "avgMinutesSpent": "Átlagosan eltöltött percek",
+    "revenueKPI": "Bevétel KPI",
+    "dailyActiveUsers": "Napi aktív felhasználók",
+    "recentSessions": "Legutóbbi munkamenetek",
+    "loadingDailyActiveUsers": "Napi aktív felhasználók adatainak betöltése...",
+    "errorLoadingDailyActiveUsers": "Hiba a napi aktív felhasználók adatainak betöltésekor:"
+  },
+  "users": {
+    "title": "Felhasználók",
+    "name": "Név",
+    "email": "E-mail",
+    "loadingUsers": "Felhasználók betöltése...",
+    "errorLoadingUsers": "Hiba a felhasználók betöltésekor:"
+  },
+  "sessions": {
+    "sessionId": "Munkamenet azonosító",
+    "userId": "Felhasználó azonosító",
+    "startTime": "Kezdési idő",
+    "endTime": "Befejezési idő",
+    "duration": "Időtartam",
+    "device": "Eszköz",
+    "ipAddress": "IP cím",
+    "noSessionsFound": "Nincs munkamenet",
+    "minutes": "perc"
+  },
+  "userJourney": {
+    "loadingUserDetails": "Felhasználó részleteinek betöltése...",
+    "errorLoadingUser": "Hiba a felhasználó betöltésekor:",
+    "userNotFound": "Felhasználó nem található",
+    "userId": "Felhasználó azonosító:",
+    "allTimeSessions": "Összes munkamenet",
+    "allTimeEvents": "Összes esemény",
+    "avgMinutesSpent": "Átlagosan eltöltött percek",
+    "allTimePurchases": "Összes vásárlás",
+    "mostRecentSession": "Legutóbbi munkamenet:",
+    "noSessionStarted": "Nincs elindított munkamenet",
+    "allEvents": "Összes esemény",
+    "eventType": "Esemény típusa",
+    "timestamp": "Időbélyeg",
+    "sessionId": "Munkamenet azonosító",
+    "pageItem": "Oldal/Tétel",
+    "timeSpent": "Eltöltött idő",
+    "searchQuery": "Keresési lekérdezés",
+    "noEventsFound": "Nincs esemény"
+  },
+  "common": {
+    "loading": "Betöltés...",
+    "error": "Hiba",
+    "language": "Nyelv"
+  }
+}

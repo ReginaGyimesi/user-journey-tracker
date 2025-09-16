@@ -1,0 +1,63 @@
+{
+  "navigation": {
+    "dashboard": "Dashboard",
+    "users": "Users",
+    "userJourneyTracker": "User journey tracker",
+    "search": "Search"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "allTimeUsers": "All time users",
+    "allTimeSessions": "All time sessions",
+    "allTimePurchases": "All time number of items purchased",
+    "avgMinutesSpent": "Average minutes spent",
+    "revenueKPI": "Revenue KPI",
+    "dailyActiveUsers": "Daily active users",
+    "recentSessions": "Recent sessions",
+    "loadingDailyActiveUsers": "Loading daily active users data...",
+    "errorLoadingDailyActiveUsers": "Error loading daily active users data:"
+  },
+  "users": {
+    "title": "Users",
+    "name": "Name",
+    "email": "Email",
+    "loadingUsers": "Loading users...",
+    "errorLoadingUsers": "Error loading users:"
+  },
+  "sessions": {
+    "sessionId": "Session ID",
+    "userId": "User ID",
+    "startTime": "Start time",
+    "endTime": "End time",
+    "duration": "Duration",
+    "device": "Device",
+    "ipAddress": "IP address",
+    "noSessionsFound": "No sessions found",
+    "minutes": "minutes"
+  },
+  "userJourney": {
+    "loadingUserDetails": "Loading user details...",
+    "errorLoadingUser": "Error loading user:",
+    "userNotFound": "User not found",
+    "userId": "User ID:",
+    "allTimeSessions": "All time sessions",
+    "allTimeEvents": "All time events",
+    "avgMinutesSpent": "Average minutes spent",
+    "allTimePurchases": "All time purchases",
+    "mostRecentSession": "Most recent session:",
+    "noSessionStarted": "No session started",
+    "allEvents": "All events",
+    "eventType": "Event Type",
+    "timestamp": "Timestamp",
+    "sessionId": "Session ID",
+    "pageItem": "Page/Item",
+    "timeSpent": "Time Spent",
+    "searchQuery": "Search Query",
+    "noEventsFound": "No events found"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "language": "Language"
+  }
+}

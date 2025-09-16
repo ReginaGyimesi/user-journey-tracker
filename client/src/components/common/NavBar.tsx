@@ -1,10 +1,13 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import styled from "styled-components";
+import { LanguageSelector } from "./LanguageSelector";
 
 export const NavBar: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { t } = useTranslation();
 
   const isActive = (path: string) => {
     return location.pathname === path;
@@ -17,21 +20,24 @@ export const NavBar: React.FC = () => {
           $isActive={isActive("/dashboard")}
           onClick={() => navigate("/dashboard")}
         >
-          Dashboard
+          {t('navigation.dashboard')}
         </NavLink>
         <NavLink
           $isActive={isActive("/users")}
           onClick={() => navigate("/users")}
         >
-          Users
+          {t('navigation.users')}
         </NavLink>
       </NavLinks>
       <SectionTitle>
         <NavLink onClick={() => navigate("/dashboard")}>
-          <h3>User journey tracker</h3>
+          <h3>{t('navigation.userJourneyTracker')}</h3>
         </NavLink>
       </SectionTitle>
-      <SearchInput placeholder="Search" />
+      <SearchContainer>
+        <SearchInput placeholder={t('navigation.search')} />
+        <LanguageSelector />
+      </SearchContainer>
     </NavigationBar>
   );
 };
@@ -88,6 +94,11 @@ const NavLink = styled.button<{ $isActive?: boolean }>`
       background-color: #4f46e5;
     }
   `}
+`;
+
+const SearchContainer = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 const SearchInput = styled.input`

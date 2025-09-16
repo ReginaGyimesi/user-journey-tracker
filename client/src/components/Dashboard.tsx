@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import { useGetAllSessionsQuery } from "../store/api/users";
 import { MetricCardsSection } from "./common/MetricCardsSection";
@@ -12,6 +13,7 @@ import {
 } from "../store/api/analytics";
 
 export const Dashboard: React.FC = () => {
+  const { t } = useTranslation();
   const { data: dashboardStats, isLoading: statsLoading } =
     useGetDashboardStatsQuery();
   const { data: sessions } = useGetAllSessionsQuery();
@@ -23,32 +25,32 @@ export const Dashboard: React.FC = () => {
   } = useGetDailyActiveUsersQuery();
 
   const metrics = [
-    { key: dashboardStats?.allTimeUsers, label: "All time users" },
-    { key: dashboardStats?.allTimeSessions, label: "All time sessions" },
+    { key: dashboardStats?.allTimeUsers, label: t('dashboard.allTimeUsers') },
+    { key: dashboardStats?.allTimeSessions, label: t('dashboard.allTimeSessions') },
     {
       key: dashboardStats?.allTimePurchases,
-      label: "All time number of items purchased",
+      label: t('dashboard.allTimePurchases'),
     },
-    { key: dashboardStats?.avgMinutesSpent, label: "Average minutes spent" },
+    { key: dashboardStats?.avgMinutesSpent, label: t('dashboard.avgMinutesSpent') },
   ];
 
   return (
     <DashboardContainer>
-      <SectionTitle>Dashboard</SectionTitle>
+      <SectionTitle>{t('dashboard.title')}</SectionTitle>
       <MetricCardsSection stats={metrics} statsLoading={statsLoading} />
 
       <ChartsSection>
         <ChartContainer>
-          <SubsectionTitle>Revenue KPI</SubsectionTitle>
+          <SubsectionTitle>{t('dashboard.revenueKPI')}</SubsectionTitle>
           <RevenueLineChart data={revenueOverTime} />
         </ChartContainer>
         <ChartContainer>
-          <SubsectionTitle>Daily Active Users</SubsectionTitle>
+          <SubsectionTitle>{t('dashboard.dailyActiveUsers')}</SubsectionTitle>
           {dailyActiveUsersLoading ? (
-            <div>Loading daily active users data...</div>
+            <div>{t('dashboard.loadingDailyActiveUsers')}</div>
           ) : dailyActiveUsersError ? (
             <div>
-              Error loading daily active users data:{" "}
+              {t('dashboard.errorLoadingDailyActiveUsers')}{" "}
               {JSON.stringify(dailyActiveUsersError)}
             </div>
           ) : (
@@ -59,7 +61,7 @@ export const Dashboard: React.FC = () => {
 
       <SessionsTable
         sessions={sessions || []}
-        title="Recent sessions"
+        title={t('dashboard.recentSessions')}
         showUserColumn={true}
       />
     </DashboardContainer>

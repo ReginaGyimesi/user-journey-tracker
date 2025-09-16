@@ -197,3 +197,5 @@ Tech used: tba
 | ![Dashboard page](/assets/dashboard.png) | ![Users page](/assets/users.png) | ![Single user page](/assets/single-user.png) |
 
 #### L3: Simple Web App (hosted at least locally) with data display/visualization views/pages connected to Backend API (no data entry forms)
+
+TBA gif or video

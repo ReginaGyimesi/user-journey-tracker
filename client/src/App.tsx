@@ -8,9 +8,9 @@ import {
 import { Provider } from "react-redux";
 import styled from "styled-components";
 import { store } from "./store";
-import { Dashboard } from "./components/Dashboard";
-import { UsersList } from "./components/UsersList";
-import { UserJourneyTracker } from "./components/UserJourneyTracker";
+import { Dashboard } from "./components/pages/Dashboard";
+import { UsersList } from "./components/pages/UsersList";
+import { UserJourney } from "./components/pages/UserJourney";
 import { NavBar } from "./components/common/NavBar";
 
 const App: React.FC = () => {
@@ -24,7 +24,7 @@ const App: React.FC = () => {
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/users" element={<UsersList />} />
-              <Route path="/users/:userId" element={<UserJourneyTracker />} />
+              <Route path="/users/:userId" element={<UserJourney />} />
             </Routes>
           </Content>
         </AppContainer>

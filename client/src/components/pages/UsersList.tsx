@@ -2,8 +2,8 @@ import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
-import { useGetUsersQuery } from "../store/api/users";
-import { useApiError } from "../hooks/useApiError";
+import { useGetUsersQuery } from "../../store/api/users";
+import { useApiError } from "../../hooks/useApiError";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 
 export const UsersList: FC = () => {
@@ -14,18 +14,20 @@ export const UsersList: FC = () => {
 
   return (
     <UsersListContainer>
-      <SectionTitle>{t('users.title')}</SectionTitle>
+      <SectionTitle>{t("users.title")}</SectionTitle>
       <UsersSection>
         {loading ? (
-          <LoadingMessage>{t('users.loadingUsers')}</LoadingMessage>
+          <LoadingMessage>{t("users.loadingUsers")}</LoadingMessage>
         ) : error ? (
-          <ErrorMessage>{t('users.errorLoadingUsers')} {errorMessage}</ErrorMessage>
+          <ErrorMessage>
+            {t("users.errorLoadingUsers")} {errorMessage}
+          </ErrorMessage>
         ) : (
           <UsersTable>
             <thead>
               <tr>
-                <th>{t('users.name')}</th>
-                <th>{t('users.email')}</th>
+                <th>{t("users.name")}</th>
+                <th>{t("users.email")}</th>
               </tr>
             </thead>
             <tbody>

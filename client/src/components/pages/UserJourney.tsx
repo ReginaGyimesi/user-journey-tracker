@@ -3,17 +3,17 @@ import React, { FC } from "react";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
-import { useApiError } from "../hooks/useApiError";
+import { useApiError } from "../../hooks/useApiError";
 import {
   useGetUserByIdQuery,
   useGetUserEventsQuery,
   useGetUserSessionsQuery,
-} from "../store/api/users";
-import { SessionsTable } from "./common/SessionsTable";
-import { MetricCardsSection } from "./common/MetricCardsSection";
-import { getRecentSessionEvents } from "../utils/helpers";
+} from "../../store/api/users";
+import { SessionsTable } from "../common/SessionsTable";
+import { MetricCardsSection } from "../common/MetricCardsSection";
+import { getRecentSessionEvents } from "../../utils/helpers";
 
-export const UserJourneyTracker: FC = () => {
+export const UserJourney: FC = () => {
   const { userId } = useParams<{ userId: string }>();
   const { t } = useTranslation();
   const {
@@ -39,15 +39,24 @@ export const UserJourneyTracker: FC = () => {
   const errorMessage = useApiError(error as FetchBaseQueryError | undefined);
 
   const metrics = [
-    { key: userSessions?.session_count || 0, label: t('userJourney.allTimeSessions') },
-    { key: userEvents?.event_count || 0, label: t('userJourney.allTimeEvents') },
+    {
+      key: userSessions?.session_count || 0,
+      label: t("userJourney.allTimeSessions"),
+    },
+    {
+      key: userEvents?.event_count || 0,
+      label: t("userJourney.allTimeEvents"),
+    },
     {
       key: userEvents?.avg_time_spent_seconds
         ? (userEvents.avg_time_spent_seconds / 60).toFixed(2)
         : 0,
-      label: t('userJourney.avgMinutesSpent'),
+      label: t("userJourney.avgMinutesSpent"),
     },
-    { key: userEvents?.all_time_purchases, label: t('userJourney.allTimePurchases') },
+    {
+      key: userEvents?.all_time_purchases,
+      label: t("userJourney.allTimePurchases"),
+    },
   ];
 
   const { recentEvent, sessionEvents } = getRecentSessionEvents(
@@ -57,7 +66,7 @@ export const UserJourneyTracker: FC = () => {
   if (loading) {
     return (
       <UserJourneyContainer>
-        <LoadingMessage>{t('userJourney.loadingUserDetails')}</LoadingMessage>
+        <LoadingMessage>{t("userJourney.loadingUserDetails")}</LoadingMessage>
       </UserJourneyContainer>
     );
   }
@@ -65,7 +74,9 @@ export const UserJourneyTracker: FC = () => {
   if (error) {
     return (
       <UserJourneyContainer>
-        <ErrorMessage>{t('userJourney.errorLoadingUser')} {errorMessage}</ErrorMessage>
+        <ErrorMessage>
+          {t("userJourney.errorLoadingUser")} {errorMessage}
+        </ErrorMessage>
       </UserJourneyContainer>
     );
   }
@@ -73,7 +84,7 @@ export const UserJourneyTracker: FC = () => {
   if (!user) {
     return (
       <UserJourneyContainer>
-        <ErrorMessage>{t('userJourney.userNotFound')}</ErrorMessage>
+        <ErrorMessage>{t("userJourney.userNotFound")}</ErrorMessage>
       </UserJourneyContainer>
     );
   }
@@ -83,7 +94,9 @@ export const UserJourneyTracker: FC = () => {
       <UserProfileHeader>
         <UserName>{user.name}</UserName>
         <UserEmail>{user.email}</UserEmail>
-        <UserID>{t('userJourney.userId')} {user._id}</UserID>
+        <UserID>
+          {t("userJourney.userId")} {user._id}
+        </UserID>
       </UserProfileHeader>
 
       <MetricCardsSection
@@ -93,16 +106,16 @@ export const UserJourneyTracker: FC = () => {
 
       <SessionsTable
         sessions={userSessions?.sessions || []}
-        title={t('userJourney.allTimeSessions')}
+        title={t("userJourney.allTimeSessions")}
         showUserColumn={false}
       />
 
       <RecentEventSection>
         <SectionTitle>
-          {t('userJourney.mostRecentSession')}{" "}
+          {t("userJourney.mostRecentSession")}{" "}
           {recentEvent
             ? new Date(recentEvent.timestamp).toLocaleString()
-            : t('userJourney.noSessionStarted')}
+            : t("userJourney.noSessionStarted")}
         </SectionTitle>
 
         {sessionEvents.length > 1 && (
@@ -120,16 +133,18 @@ export const UserJourneyTracker: FC = () => {
       </RecentEventSection>
 
       <AllEventsSection>
-        <SectionTitle>{t('userJourney.allEvents')} ({userEvents?.event_count || 0})</SectionTitle>
+        <SectionTitle>
+          {t("userJourney.allEvents")} ({userEvents?.event_count || 0})
+        </SectionTitle>
         <EventsTable>
           <thead>
             <tr>
-              <th>{t('userJourney.eventType')}</th>
-              <th>{t('userJourney.timestamp')}</th>
-              <th>{t('userJourney.sessionId')}</th>
-              <th>{t('userJourney.pageItem')}</th>
-              <th>{t('userJourney.timeSpent')}</th>
-              <th>{t('userJourney.searchQuery')}</th>
+              <th>{t("userJourney.eventType")}</th>
+              <th>{t("userJourney.timestamp")}</th>
+              <th>{t("userJourney.sessionId")}</th>
+              <th>{t("userJourney.pageItem")}</th>
+              <th>{t("userJourney.timeSpent")}</th>
+              <th>{t("userJourney.searchQuery")}</th>
             </tr>
           </thead>
           <tbody>
@@ -151,7 +166,7 @@ export const UserJourneyTracker: FC = () => {
             )) || (
               <tr>
                 <td colSpan={6} style={{ textAlign: "center", color: "#666" }}>
-                  {t('userJourney.noEventsFound')}
+                  {t("userJourney.noEventsFound")}
                 </td>
               </tr>
             )}

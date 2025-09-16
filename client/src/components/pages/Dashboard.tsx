@@ -1,16 +1,16 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
-import { useGetAllSessionsQuery } from "../store/api/users";
-import { MetricCardsSection } from "./common/MetricCardsSection";
-import RevenueLineChart from "./common/RevenueLineChart";
-import DailyActiveUsersChart from "./common/DailyActiveUsersChart";
-import { SessionsTable } from "./common/SessionsTable";
+import { useGetAllSessionsQuery } from "../../store/api/users";
+import { MetricCardsSection } from "../common/MetricCardsSection";
+import RevenueLineChart from "../analytics/RevenueLineChart";
+import DailyActiveUsersChart from "../analytics/DailyActiveUsersChart";
+import { SessionsTable } from "../common/SessionsTable";
 import {
   useGetDailyActiveUsersQuery,
   useGetDashboardStatsQuery,
   useGetRevenueOverTimeQuery,
-} from "../store/api/analytics";
+} from "../../store/api/analytics";
 
 export const Dashboard: React.FC = () => {
   const { t } = useTranslation();
@@ -25,32 +25,38 @@ export const Dashboard: React.FC = () => {
   } = useGetDailyActiveUsersQuery();
 
   const metrics = [
-    { key: dashboardStats?.allTimeUsers, label: t('dashboard.allTimeUsers') },
-    { key: dashboardStats?.allTimeSessions, label: t('dashboard.allTimeSessions') },
+    { key: dashboardStats?.allTimeUsers, label: t("dashboard.allTimeUsers") },
+    {
+      key: dashboardStats?.allTimeSessions,
+      label: t("dashboard.allTimeSessions"),
+    },
     {
       key: dashboardStats?.allTimePurchases,
-      label: t('dashboard.allTimePurchases'),
+      label: t("dashboard.allTimePurchases"),
     },
-    { key: dashboardStats?.avgMinutesSpent, label: t('dashboard.avgMinutesSpent') },
+    {
+      key: dashboardStats?.avgMinutesSpent,
+      label: t("dashboard.avgMinutesSpent"),
+    },
   ];
 
   return (
     <DashboardContainer>
-      <SectionTitle>{t('dashboard.title')}</SectionTitle>
+      <SectionTitle>{t("dashboard.title")}</SectionTitle>
       <MetricCardsSection stats={metrics} statsLoading={statsLoading} />
 
       <ChartsSection>
         <ChartContainer>
-          <SubsectionTitle>{t('dashboard.revenueKPI')}</SubsectionTitle>
+          <SubsectionTitle>{t("dashboard.revenueKPI")}</SubsectionTitle>
           <RevenueLineChart data={revenueOverTime} />
         </ChartContainer>
         <ChartContainer>
-          <SubsectionTitle>{t('dashboard.dailyActiveUsers')}</SubsectionTitle>
+          <SubsectionTitle>{t("dashboard.dailyActiveUsers")}</SubsectionTitle>
           {dailyActiveUsersLoading ? (
-            <div>{t('dashboard.loadingDailyActiveUsers')}</div>
+            <div>{t("dashboard.loadingDailyActiveUsers")}</div>
           ) : dailyActiveUsersError ? (
             <div>
-              {t('dashboard.errorLoadingDailyActiveUsers')}{" "}
+              {t("dashboard.errorLoadingDailyActiveUsers")}{" "}
               {JSON.stringify(dailyActiveUsersError)}
             </div>
           ) : (
@@ -61,7 +67,7 @@ export const Dashboard: React.FC = () => {
 
       <SessionsTable
         sessions={sessions || []}
-        title={t('dashboard.recentSessions')}
+        title={t("dashboard.recentSessions")}
         showUserColumn={true}
       />
     </DashboardContainer>

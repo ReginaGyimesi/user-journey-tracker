@@ -20,31 +20,37 @@ export const NavBar: React.FC = () => {
           $isActive={isActive("/dashboard")}
           onClick={() => navigate("/dashboard")}
         >
-          {t('navigation.dashboard')}
+          {t("navigation.dashboard")}
         </NavLink>
         <NavLink
           $isActive={isActive("/users")}
           onClick={() => navigate("/users")}
         >
-          {t('navigation.users')}
+          {t("navigation.users")}
         </NavLink>
       </NavLinks>
       <SectionTitle>
         <NavLink onClick={() => navigate("/dashboard")}>
-          <h3>{t('navigation.userJourneyTracker')}</h3>
+          <h3>{t("navigation.userJourneyTracker")}</h3>
         </NavLink>
       </SectionTitle>
       <SearchContainer>
-        <SearchInput placeholder={t('navigation.search')} />
+        <SearchInput placeholder={t("navigation.search")} />
         <LanguageSelector />
       </SearchContainer>
     </NavigationBar>
   );
 };
 
-const SectionTitle = styled.h3`
+const SectionTitle = styled.div`
   color: #333;
   font-size: 18px;
+
+  @media (min-width: 1024px) {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
 `;
 
 const NavigationBar = styled.nav`
@@ -56,6 +62,10 @@ const NavigationBar = styled.nav`
   border-bottom: 1px solid #e0e0e0;
   background: white;
   flex-shrink: 0;
+
+  @media (min-width: 1024px) {
+    position: relative;
+  }
 `;
 
 const NavLinks = styled.div`

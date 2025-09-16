@@ -81,7 +81,7 @@
 - Data generated is not consistent or truthful
 - Which calculations should happen on the server side and which ones on the frontend side? (e.g. displaying most recent sessions)
 
-## Date: 2025-09-15
+## Date: 2025-09-15 (time spent ~2 hours)
 
 ### Goals for today
 
@@ -113,4 +113,22 @@ Minimum requirements for myself:
 If time allows:
 
 - Read more about deployment to AWS
+-
+
+## Date: 2025-09-16
+
+### Goals for today
+
+#### Refactoring, diagrams and search function
+
+- Refactor FE and server layer code
+- Add missing diagrams
+- Start implementing search functionality
+
+### Tasks completed
+
+-
+
+### Challenges
+
 -

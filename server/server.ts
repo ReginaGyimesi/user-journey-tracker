@@ -4,6 +4,8 @@ import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import connectToDatabase from "./db/connection.js";
 import users from "./routes/users.js";
+import analytics from "./routes/analytics.js";
+import sessions from "./routes/sessions.js";
 
 const PORT = process.env.PORT || 5050;
 const app = express();
@@ -42,6 +44,8 @@ app.get("/api-docs/swagger.json", (req, res) => {
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use("/api", users);
+app.use("/api", analytics);
+app.use("/api", sessions);
 
 // Initialize database connection and start server
 async function startServer() {

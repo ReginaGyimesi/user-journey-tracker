@@ -1,14 +1,13 @@
 import React from "react";
 import styled from "styled-components";
-import { mockChartData } from "../data/mockData";
 import {
   useGetAllSessionsQuery,
   useGetDashboardStatsQuery,
   useGetRevenueOverTimeQuery,
 } from "../store/api";
-import { SessionsTable } from "./common/SessionsTable";
 import { MetricCardsSection } from "./common/MetricCardsSection";
-import RevenueLineChart from "./common/RevenueLinceChart";
+import RevenueLineChart from "./common/RevenueLineChart";
+import { SessionsTable } from "./common/SessionsTable";
 
 export const Dashboard: React.FC = () => {
   const { data: dashboardStats, isLoading: statsLoading } =
@@ -39,14 +38,14 @@ export const Dashboard: React.FC = () => {
           <RevenueLineChart data={revenueOverTime} />
         </ChartContainer>
         <ChartContainer>
-          <SubsectionTitle>Session Trends</SubsectionTitle>
+          {/* <SubsectionTitle>Session Trends</SubsectionTitle>
           <BarChart>
             {mockChartData.map((item, index) => (
               <Bar key={index} height={item.value / 8}>
                 <BarValue>{item.value}</BarValue>
               </Bar>
             ))}
-          </BarChart>
+          </BarChart> */}
         </ChartContainer>
       </ChartsSection>
 
@@ -90,30 +89,4 @@ const ChartContainer = styled.div`
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-`;
-
-const BarChart = styled.div`
-  display: flex;
-  align-items: end;
-  gap: 10px;
-  height: 200px;
-  padding: 10px 0;
-`;
-
-const Bar = styled.div<{ height: number }>`
-  flex: 1;
-  background: linear-gradient(to top, #4f46e5, #7c3aed);
-  height: ${(props) => props.height}px;
-  border-radius: 4px 4px 0 0;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding-top: 5px;
-  min-height: 20px;
-`;
-
-const BarValue = styled.span`
-  color: white;
-  font-size: 12px;
-  font-weight: bold;
 `;

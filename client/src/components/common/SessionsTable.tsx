@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Session } from "../../types";
 import { calculateDuration } from "../../utils/helpers";
@@ -14,6 +15,7 @@ export const SessionsTable: React.FC<SessionsTableProps> = ({
   title,
   showUserColumn = false,
 }) => {
+  const navigate = useNavigate();
   if (!sessions || sessions.length === 0) {
     return (
       <SessionsTableContainer>
@@ -39,10 +41,16 @@ export const SessionsTable: React.FC<SessionsTableProps> = ({
           </tr>
         </thead>
         <tbody>
-          {sessions.map((session) => (
+          {sessions.slice(0, 15).map((session) => (
             <tr key={session._id}>
               <td>{session._id}</td>
-              {showUserColumn && <td>{session.userId}</td>}
+              {showUserColumn && (
+                <td>
+                  <NavLink onClick={() => navigate(`/users/${session.userId}`)}>
+                    {session.userId}
+                  </NavLink>
+                </td>
+              )}
               <td>{new Date(session.startTime).toLocaleString()}</td>
               <td>{new Date(session.endTime).toLocaleString()}</td>
               <td>
@@ -100,4 +108,15 @@ const EmptyMessage = styled.div`
   padding: 40px;
   color: #666;
   font-size: 16px;
+`;
+
+const NavLink = styled.button<{ $isActive?: boolean }>`
+  background: none;
+  border: none;
+  color: #4f46e5;
+  font-size: 16px;
+  cursor: pointer;
+  position: relative;
+  font-weight: 600;
+  text-decoration: underline;
 `;

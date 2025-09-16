@@ -1,50 +1,7 @@
 import express from "express";
 
 import connectToDatabase from "../db/connection.js";
-import { ObjectId } from "mongodb";
-
-export interface User {
-  _id: string;
-  name: string;
-  email: string;
-  createdAt: string;
-  lastActiveAt: string;
-}
-
-export interface Session {
-  _id: string;
-  userId: string;
-  startTime: string;
-  endTime: string;
-  deviceInfo: {
-    browser: string;
-    os: string;
-  };
-  ipAddress: string;
-}
-
-export interface DashboardStats {
-  allTimeUsers: number;
-  allTimeSessions: number;
-  allTimePurchases: number;
-  avgMinutesSpent: number;
-}
-
-export interface Event {
-  _id: string;
-  event_id: string;
-  user_id: string;
-  session_id: string;
-  event_type: string;
-  timestamp: string;
-  metadata: {
-    page_id?: string;
-    item_id?: string;
-    time_spent_seconds?: number;
-    search_query?: string;
-    price?: number;
-  };
-}
+import { Event, Session, User } from "../types/index.js";
 
 const router = express.Router();
 
@@ -167,223 +124,6 @@ router.get("/users/:id", async (req, res) => {
 
 /**
  * @swagger
- * /api/users/{id}/sessions:
- *   get:
- *     summary: Get sessions for a specific user
- *     description: Retrieve all sessions for a user with session count
- *     tags: [Users]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         description: The user's unique identifier
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: Sessions retrieved successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 user_id:
- *                   type: string
- *                 session_count:
- *                   type: number
- *                 sessions:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       _id:
- *                         type: string
- *                       userId:
- *                         type: string
- *                       startTime:
- *                         type: string
- *                       endTime:
- *                         type: string
- *                       deviceInfo:
- *                         type: object
- *                         properties:
- *                           browser:
- *                             type: string
- *                           os:
- *                             type: string
- *                       ipAddress:
- *                         type: string
- *       404:
- *         description: User not found
- *       500:
- *         $ref: '#/components/responses/ErrorResponse'
- */
-router.get("/users/:id/sessions", async (req, res) => {
-  try {
-    const userId = req.params.id;
-    const db = await connectToDatabase();
-    let sessionsCollection = db.collection<Session>("sessions");
-
-    // Get all sessions for the user
-    let sessions = await sessionsCollection.find({ userId: userId }).toArray();
-
-    // Get user info to verify user exists
-    let usersCollection = db.collection<User>("users");
-    let user = await usersCollection.findOne({ _id: userId });
-
-    if (!user) {
-      res.status(404).send("User not found");
-      return;
-    }
-
-    const response = {
-      user_id: userId,
-      session_count: sessions.length,
-      sessions: sessions,
-    };
-
-    res.send(response).status(200);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Error fetching user sessions");
-  }
-});
-
-/**
- * @swagger
- * /api/sessions:
- *   get:
- *     summary: Get all sessions
- *     description: Retrieve all sessions from the database
- *     tags: [Sessions]
- *     responses:
- *       200:
- *         description: Sessions retrieved successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   session_id:
- *                     type: string
- *                   user_id:
- *                     type: string
- *                   start_time:
- *                     type: string
- *                   end_time:
- *                     type: string
- *                   device:
- *                     type: string
- *                   location:
- *                     type: string
- *       500:
- *         $ref: '#/components/responses/ErrorResponse'
- */
-router.get("/sessions", async (req, res) => {
-  try {
-    const db = await connectToDatabase();
-    let collection = db.collection<Session>("sessions");
-    let results = await collection.find({}).toArray();
-    res.send(results).status(200);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Error fetching sessions");
-  }
-});
-
-/**
- * @swagger
- * /api/dashboard/stats:
- *   get:
- *     summary: Get dashboard statistics
- *     description: Retrieve aggregated statistics for the dashboard including all-time users, sessions, purchases, and average minutes spent
- *     tags: [Dashboard]
- *     responses:
- *       200:
- *         description: Dashboard statistics retrieved successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 allTimeUsers:
- *                   type: number
- *                   description: Total number of users
- *                   example: 50
- *                 allTimeSessions:
- *                   type: number
- *                   description: Total number of sessions
- *                   example: 171
- *                 allTimePurchases:
- *                   type: number
- *                   description: Total number of items purchased
- *                   example: 1367
- *                 avgMinutesSpent:
- *                   type: number
- *                   description: Average minutes spent per session
- *                   example: 4
- *       500:
- *         $ref: '#/components/responses/ErrorResponse'
- */
-router.get("/dashboard/stats", async (req, res) => {
-  try {
-    const db = await connectToDatabase();
-
-    // Get all time users count
-    const usersCollection = db.collection<User>("users");
-    const allTimeUsers = await usersCollection.countDocuments();
-
-    // Get all time sessions count
-    const sessionsCollection = db.collection<Session>("sessions");
-    const allTimeSessions = await sessionsCollection.countDocuments();
-
-    // Get all events
-    const eventsCollection = db.collection<Session>("events");
-
-    // Find all PURCHASE events
-    const allTimePurchases = await eventsCollection.countDocuments({
-      event_type: "PURCHASE",
-    });
-
-    // Calculate average minutes spent from sessions
-    const sessions = await sessionsCollection.find({}).toArray();
-    let totalMinutes = 0;
-    let validSessions = 0;
-
-    sessions.forEach((session) => {
-      const startTime = new Date(session.startTime);
-      const endTime = new Date(session.endTime);
-      const durationMs = endTime.getTime() - startTime.getTime();
-      const durationMinutes = durationMs / (1000 * 60); // Convert to minutes
-
-      if (durationMinutes > 0 && durationMinutes < 1440) {
-        // Valid session (less than 24 hours)
-        totalMinutes += durationMinutes;
-        validSessions++;
-      }
-    });
-
-    const avgMinutesSpent =
-      validSessions > 0 ? Math.round(totalMinutes / validSessions) : 4;
-
-    const dashboardStats: DashboardStats = {
-      allTimeUsers,
-      allTimeSessions,
-      allTimePurchases,
-      avgMinutesSpent,
-    };
-
-    res.send(dashboardStats).status(200);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Error fetching dashboard statistics");
-  }
-});
-
-/**
- * @swagger
  * /api/users/{id}/events:
  *   get:
  *     summary: Get events for a specific user
@@ -499,93 +239,85 @@ router.get("/users/:id/events", async (req, res) => {
 
 /**
  * @swagger
- * /api/analytics/revenue:
+ * /api/users/{id}/sessions:
  *   get:
- *     summary: Get revenue analytics over time
- *     description: Retrieve aggregated revenue data grouped by date from purchase events
- *     tags: [Analytics]
+ *     summary: Get sessions for a specific user
+ *     description: Retrieve all sessions for a user with session count
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The user's unique identifier
+ *         schema:
+ *           type: string
  *     responses:
  *       200:
- *         description: Revenue analytics retrieved successfully
+ *         description: Sessions retrieved successfully
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   _id:
+ *               type: object
+ *               properties:
+ *                 user_id:
+ *                   type: string
+ *                 session_count:
+ *                   type: number
+ *                 sessions:
+ *                   type: array
+ *                   items:
  *                     type: object
  *                     properties:
- *                       year:
- *                         type: number
- *                         example: 2025
- *                       month:
- *                         type: number
- *                         example: 9
- *                       day:
- *                         type: number
- *                         example: 1
- *                   totalRevenue:
- *                     type: number
- *                     description: Total revenue for the day
- *                     example: 848.29
- *                   purchaseCount:
- *                     type: number
- *                     description: Number of purchases for the day
- *                     example: 5
- *                   date:
- *                     type: string
- *                     format: date
- *                     description: The date in ISO format
- *                     example: "2025-09-01T00:00:00.000Z"
+ *                       _id:
+ *                         type: string
+ *                       userId:
+ *                         type: string
+ *                       startTime:
+ *                         type: string
+ *                       endTime:
+ *                         type: string
+ *                       deviceInfo:
+ *                         type: object
+ *                         properties:
+ *                           browser:
+ *                             type: string
+ *                           os:
+ *                             type: string
+ *                       ipAddress:
+ *                         type: string
+ *       404:
+ *         description: User not found
  *       500:
  *         $ref: '#/components/responses/ErrorResponse'
  */
-router.get("/analytics/revenue", async (req, res) => {
+router.get("/users/:id/sessions", async (req, res) => {
   try {
+    const userId = req.params.id;
     const db = await connectToDatabase();
-    const eventsCollection = db.collection<Event>("events");
+    let sessionsCollection = db.collection<Session>("sessions");
 
-    const revenueOverTime = await eventsCollection
-      .aggregate([
-        {
-          $match: { event_type: "PURCHASE" },
-        },
-        {
-          $group: {
-            _id: {
-              year: { $year: { $toDate: "$timestamp" } },
-              month: { $month: { $toDate: "$timestamp" } },
-              day: { $dayOfMonth: { $toDate: "$timestamp" } },
-            },
-            totalRevenue: { $sum: "$metadata.price" },
-            purchaseCount: { $sum: 1 },
-          },
-        },
-        {
-          $sort: { "_id.year": 1, "_id.month": 1, "_id.day": 1 },
-        },
-        {
-          $project: {
-            date: {
-              $dateFromParts: {
-                year: "$_id.year",
-                month: "$_id.month",
-                day: "$_id.day",
-              },
-            },
-            totalRevenue: 1,
-            purchaseCount: 1,
-          },
-        },
-      ])
-      .toArray();
+    // Get all sessions for the user
+    let sessions = await sessionsCollection.find({ userId: userId }).toArray();
 
-    res.json(revenueOverTime);
+    // Get user info to verify user exists
+    let usersCollection = db.collection<User>("users");
+    let user = await usersCollection.findOne({ _id: userId });
+
+    if (!user) {
+      res.status(404).send("User not found");
+      return;
+    }
+
+    const response = {
+      user_id: userId,
+      session_count: sessions.length,
+      sessions: sessions,
+    };
+
+    res.send(response).status(200);
   } catch (err) {
     console.error(err);
-    res.status(500).send("Error fetching revenue data");
+    res.status(500).send("Error fetching user sessions");
   }
 });
 

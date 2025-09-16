@@ -57,7 +57,7 @@ export const apiSlice = createApi({
 
     // Get dashboard statistics
     getDashboardStats: builder.query<DashboardMetrics, void>({
-      query: () => "/dashboard/stats",
+      query: () => "/analytics/stats",
       providesTags: ["DashboardStats"],
     }),
 

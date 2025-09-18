@@ -44,8 +44,18 @@ A MERN stack (MongoDB, Express, React, Node.js) application with TypeScript that
 4. **Set up environment variables**
 
    - Create `server/config.env` file
-   - Add your MongoDB connection string and any other required environment variables
-   - **TBA: add test user to Mongo? add test credentials**
+
+   ```bash
+   cd server
+   touch config.env
+   ```
+
+   - Add the following content to server/config.env:
+
+   ```
+   ATLAS_URI=mongodb+srv://test_user:AkPPdlCSqUE6Yh9H@user-journey-tracker.of5ph93.mongodb.net/?retryWrites=true&w=majority&appName=user-journey-tracker
+   PORT=5050
+   ```
 
 5. **Build the server**
 

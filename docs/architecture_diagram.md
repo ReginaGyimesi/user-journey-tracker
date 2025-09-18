@@ -18,7 +18,7 @@ flowchart TB
     FE[S3 React Frontend]
     GW[API Gateway]
     L[Lambda Node.js Backend]
-    DB[Amazon DocumentDB / DynamoDB]
+    DB[Amazon DocumentDB]
     CW[CloudWatch]
 
     %% User to Frontend

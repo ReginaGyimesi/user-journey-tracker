@@ -179,7 +179,7 @@ API can be called and tested after local setup is done.
 
 2. Postman:
 
-[](/assets/postman-example.png)
+![Example postman](/assets/postman-example.png)
 
 ---
 
@@ -211,8 +211,6 @@ User stories:
 #### L3: Simple Web App (hosted at least locally) with data display/visualization views/pages connected to Backend API (no data entry forms)
 
 TBA gif or video
-
----
 
 ## Bonus challenge
 

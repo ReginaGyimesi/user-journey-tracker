@@ -4,8 +4,8 @@ A MERN stack (MongoDB, Express, React, Node.js) application with TypeScript that
 
 ## Other documents
 
-[Search considerations](docs/search_considerations.md)
-[Development workbook](docs/development_workbook.md)
+1. [Search considerations](docs/search_considerations.md)
+2. [Development workbook](docs/development_workbook.md)
 
 ## Installation Guide
 
@@ -211,6 +211,8 @@ User stories:
 #### L3: Simple Web App (hosted at least locally) with data display/visualization views/pages connected to Backend API (no data entry forms)
 
 TBA gif or video
+
+---
 
 ## Bonus challenge
 

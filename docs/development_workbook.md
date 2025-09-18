@@ -112,8 +112,8 @@ Minimum requirements for MVP:
 - Implement search ✅
 - Implement the challenge - localisation to Hungarian language on the client side (and maybe server side, too?) ✅
 - Add cloud diagram
-- Add video for UI when ready
-- Documentation and justifications
+- Add video for UI when ready ✅
+- Documentation and justifications ✅
 
 If time allows:
 

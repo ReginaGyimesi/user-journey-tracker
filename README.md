@@ -211,10 +211,13 @@ User stories:
 
 #### L3: Simple Web App (hosted at least locally) with data display/visualization views/pages connected to Backend API (no data entry forms)
 
-<video width="640" height="360" controls>
-  <source src="/assets/example-flow.mov" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+**Click the image below this text to watch the video:**
+
+[![Demo](/assets/screen1.png)](https://drive.google.com/file/d/1kteOjsr3DBuQwC8rZM6aCuKyb1DiNbtd/view?usp=sharing)
+
+![Search user](/assets/screen2.png)
+
+![Single user page](/assets/screen3.png)
 
 ## Bonus challenge
 

@@ -108,27 +108,50 @@ Minimum requirements for MVP:
 - Add diagrams on the Dashboard page ✅
 - Refine endpoints and calculations ✅
 - Make a Postman call to API (although cURL works)
-- Implement search and think about how would it be best to do the search from an efficieny point of view
+- Think about how would it be best to do the search from an efficieny point of view ✅
+- Implement search
 - Implement the challenge - localisation to Hungarian language on the client side (and maybe server side, too?) ✅
 - Add cloud diagram
+- Add video for UI when ready
 - Documentation and justifications
 
 If time allows:
 
 - Read more about deployment to AWS
 - Read more about event sourcing
+- Testing
 
 ---
 
-## Date: 2025-09-16
+## Date: 2025-09-16 (time spent ~2 hours)
 
 ### Goals for today
 
-#### Refactoring, diagrams and search function
+#### Refactoring, search
 
 - Refactor FE and server layer code
-- Add missing diagrams
-- Start implementing search functionality
+- Read about search
+
+### Tasks completed
+
+- Refactored:
+  - Split up server code and API calls into files by route prefix
+  - Refined calculations so it's showing the right average minutes value
+- Generated HU/EN localisation, validated locales
+- Read about search, was brainstorming a bit with ChatGPT about indexes and OpenSearch
+
+### Challenges
+
+- Skipped generating more languages as I can't validate the generated text
+- Understanding search logic
+
+## Date: 2025-09-18
+
+### Goals for today
+
+#### Implement search, add cloud diagram
+
+- Implement search ([going with option 2](search_considerations.md#2-search-by-email-or-name-with-a-partial-search-current-implementation-choice))
 
 ### Tasks completed
 

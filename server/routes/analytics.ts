@@ -10,7 +10,7 @@ const router = express.Router();
  *   get:
  *     summary: Get dashboard statistics
  *     description: Retrieve aggregated statistics for the dashboard including all-time users, sessions, purchases, and average minutes spent
- *     tags: [Dashboard]
+ *     tags: [Analytics]
  *     responses:
  *       200:
  *         description: Dashboard statistics retrieved successfully

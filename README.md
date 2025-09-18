@@ -4,6 +4,7 @@ A MERN stack (MongoDB, Express, React, Node.js) application with TypeScript that
 
 ## Other documents
 
+[Search considerations](docs/search_considerations.md)
 [Development workbook](docs/development_workbook.md)
 
 ## Installation Guide
@@ -150,10 +151,6 @@ erDiagram
     }
 ```
 
-#### Best storage approach for search
-
-TBA
-
 #### L2: DB implementation using free-tier cloud service.
 
 ##### Mongo DB vs Amazon Document DB
@@ -165,6 +162,24 @@ Although Amazon DocumentDB is also MongoDB compatible, I found that Atlas offers
 ---
 
 ### API L2
+
+#### L1: API Documentation with all essential endpoints (Using Swagger or something similar will be good).
+
+API documentation is available after installation on: http://localhost:5050/api-docs
+
+TBA: add picture
+
+#### L2: Full API implementation. It should be working and hosted locally (The API should be available for testing via tools like Postman).
+
+API can be called and tested after local setup is done.
+
+1. CURL:
+
+`curl -X GET "http://localhost:5050/api/users/1f07b975-59d5-41ee-9c86-5a49c7d09316" -H "Accept: application/json"`
+
+2. Postman:
+
+[](/assets/postman-example.png)
 
 ---
 
@@ -180,17 +195,14 @@ Functionalities: search, session start time, number of pages/items visited, purc
 
 User stories:
 
-- As an operational agent, I'd like to search by users to see detailed user activity with session time, pages visited and items purchased so I can investigate specific issues.
-- As a product manager, I'd like to see how many people drop off after a certain page so I can initiate improvements.
-- As a marketing analyst, I'd like to filter user journeys by date range and channel so that I can compare seasonal or campaign-driven behavior.
-- As a business owner, I'd like to see what are the best selling products are by purchase count or time spent on each page so I can maintain stock.
+- As an operational agent, I'd like to search by users to see detailed user activity with session time and pages visited so I can investigate specific issues.
+- As a product manager, I’d like to identify which users have high session frequency but no purchases so I can explore potential friction points.
+- As a business owner, I’d like to monitor the trend of total sessions vs. unique users so I can assess repeat engagement.
 - As a product analyst, I'd like to see how long customers are spending on each page so I can identify drop off points.
 
 ![Wireframes](/assets/wireframes.svg)
 
 #### L2: More advanced prototype or MVP to present the idea (Pages transition and basic actions, but not connected to the Backend API)
-
-Tech used: tba
 
 | Dashboard page                           | Users page                       | Single user page                             |
 | ---------------------------------------- | -------------------------------- | -------------------------------------------- |
@@ -204,4 +216,5 @@ TBA gif or video
 
 ### Localisation on the client side
 
-Justification TBA
+**i18n justification:**  
+Client-side internationalisation was chosen here to speed up development, as I already had experience with i18n libraries. This allows for fast implementation of multi-language support, dynamic content rendering, and consistency across UI components without adding server complexity.

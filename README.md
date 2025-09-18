@@ -4,6 +4,8 @@ A MERN stack (MongoDB, Express, React, Node.js) application with TypeScript that
 
 ## Other documents
 
+[Architecture diagram](docs/architecture_diagram.md)
+
 [Search considerations](docs/search_considerations.md)
 
 [Development workbook](docs/development_workbook.md)
@@ -156,7 +158,7 @@ erDiagram
 
 ##### Mongo DB vs Amazon Document DB
 
-I chose MongoDB Atlas on AWS because MongoDB was a requirement for this project, and Atlas provides a fully managed, scalable, and secure environment suitable for our needs.
+I chose MongoDB Atlas because MongoDB was a requirement for this project, and Atlas provides a fully managed, scalable, and secure environment suitable for our needs.
 
 Although Amazon DocumentDB is also MongoDB compatible, I found that Atlas offers all the features necessary to host and run this exercise efficiently.
 
@@ -172,11 +174,12 @@ API documentation is available after installation on: http://localhost:5050/api-
 
 #### L2: Full API implementation. It should be working and hosted locally (The API should be available for testing via tools like Postman).
 
-API can be called and tested after local setup is done.
+**API Architecture:**
+The current implementation is a read-only REST API since I'm only using GET methods, but the architecture is set up to easily support full CRUD operations (Create, Read, Update, Delete) by adding POST, PUT, PATCH, and DELETE endpoints when needed.
 
-1. CURL:
+**API can be called and tested after local setup is done.**
 
-`curl -X GET "http://localhost:5050/api/users/1f07b975-59d5-41ee-9c86-5a49c7d09316" -H "Accept: application/json"`
+1. CURL: `curl -X GET "http://localhost:5050/api/users/1f07b975-59d5-41ee-9c86-5a49c7d09316" -H "Accept: application/json"`
 
 2. Postman:
 
@@ -185,6 +188,10 @@ API can be called and tested after local setup is done.
 ---
 
 ### Cloud L1
+
+#### L1: System Diagram showing main system components (cloud services) and the data flow or workflow steps.
+
+Please see [architecture diagram with cloud components](/docs/architecture_diagram.md).
 
 ---
 

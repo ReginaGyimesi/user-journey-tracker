@@ -129,7 +129,7 @@ router.get("/users/search", async (req, res) => {
   try {
     const { q, limit = 10 } = req.query;
 
-    if (!q || typeof q !== 'string' || q.trim().length === 0) {
+    if (!q || typeof q !== "string" || q.trim().length === 0) {
       res.status(400).send("Search query is required");
       return;
     }
@@ -141,15 +141,18 @@ router.get("/users/search", async (req, res) => {
     const usersCollection = db.collection<User>("users");
 
     // Create a regex pattern for partial matching (case-insensitive)
-    const regexPattern = new RegExp(searchQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+    const regexPattern = new RegExp(
+      searchQuery.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
+      "i"
+    );
 
     // Search in both name and email fields
     const searchResults = await usersCollection
       .find({
         $or: [
           { name: { $regex: regexPattern } },
-          { email: { $regex: regexPattern } }
-        ]
+          { email: { $regex: regexPattern } },
+        ],
       })
       .limit(maxLimit)
       .toArray();
@@ -162,25 +165,47 @@ router.get("/users/search", async (req, res) => {
           { name: { $regex: regexPattern } },
           { email: { $regex: regexPattern } },
           // Fuzzy matches for common typos (simple implementation)
-          { name: { $regex: new RegExp(searchQuery.replace(/[aeiou]/g, '[aeiou]'), 'i') } },
-          { email: { $regex: new RegExp(searchQuery.replace(/[aeiou]/g, '[aeiou]'), 'i') } }
-        ]
+          {
+            name: {
+              $regex: new RegExp(
+                searchQuery.replace(/[aeiou]/g, "[aeiou]"),
+                "i"
+              ),
+            },
+          },
+          {
+            email: {
+              $regex: new RegExp(
+                searchQuery.replace(/[aeiou]/g, "[aeiou]"),
+                "i"
+              ),
+            },
+          },
+        ],
       })
       .limit(maxLimit)
       .toArray();
 
     // Combine and deduplicate results
     const allResults = [...searchResults, ...fuzzyResults];
-    const uniqueResults = allResults.filter((user, index, self) => 
-      index === self.findIndex(u => u._id === user._id)
+    const uniqueResults = allResults.filter(
+      (user, index, self) => index === self.findIndex((u) => u._id === user._id)
     );
 
     // Sort results by relevance (exact matches first, then partial matches)
     const sortedResults = uniqueResults.sort((a, b) => {
-      const aNameMatch = a.name.toLowerCase().includes(searchQuery.toLowerCase());
-      const aEmailMatch = a.email.toLowerCase().includes(searchQuery.toLowerCase());
-      const bNameMatch = b.name.toLowerCase().includes(searchQuery.toLowerCase());
-      const bEmailMatch = b.email.toLowerCase().includes(searchQuery.toLowerCase());
+      const aNameMatch = a.name
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
+      const aEmailMatch = a.email
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
+      const bNameMatch = b.name
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
+      const bEmailMatch = b.email
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
 
       // Exact matches get higher priority
       if (aNameMatch && !bNameMatch) return -1;
@@ -195,7 +220,7 @@ router.get("/users/search", async (req, res) => {
     const response = {
       users: sortedResults.slice(0, maxLimit),
       total: sortedResults.length,
-      query: searchQuery
+      query: searchQuery,
     };
 
     res.send(response).status(200);

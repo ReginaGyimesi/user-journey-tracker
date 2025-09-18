@@ -1,4 +1,4 @@
-# Search Considerations
+# Search considerations
 
 The task specifies _“search functionality for individual users”_. This can be interpreted in multiple ways depending on the system’s requirements and user expectations. Below are the main approaches, with their pros, cons, and example implementations.
 

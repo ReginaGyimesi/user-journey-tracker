@@ -4,8 +4,9 @@ A MERN stack (MongoDB, Express, React, Node.js) application with TypeScript that
 
 ## Other documents
 
-1. [Search considerations](docs/search_considerations.md)
-2. [Development workbook](docs/development_workbook.md)
+[Search considerations](docs/search_considerations.md)
+
+[Development workbook](docs/development_workbook.md)
 
 ## Installation Guide
 

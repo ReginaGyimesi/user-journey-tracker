@@ -59,5 +59,11 @@
     "loading": "Betöltés...",
     "error": "Hiba",
     "language": "Nyelv"
+  },
+  "search": {
+    "loading": "Keresés...",
+    "error": "Hiba a felhasználók keresésekor",
+    "noResults": "Nincs felhasználó",
+    "results": "{{count}} találat"
   }
 }

@@ -59,5 +59,11 @@
     "loading": "Loading...",
     "error": "Error",
     "language": "Language"
+  },
+  "search": {
+    "loading": "Searching...",
+    "error": "No users found",
+    "noResults": "No users found",
+    "results": "{{count}} results found"
   }
 }

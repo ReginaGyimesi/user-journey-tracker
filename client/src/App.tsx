@@ -1,19 +1,19 @@
-import React from "react";
+import { FC } from "react";
+import { Provider } from "react-redux";
 import {
+  Navigate,
+  Route,
   BrowserRouter as Router,
   Routes,
-  Route,
-  Navigate,
 } from "react-router-dom";
-import { Provider } from "react-redux";
 import styled from "styled-components";
-import { store } from "./store";
-import { Dashboard } from "./components/pages/Dashboard";
-import { UsersList } from "./components/pages/UsersList";
-import { UserJourney } from "./components/pages/UserJourney";
 import { NavBar } from "./components/common/NavBar";
+import { Dashboard } from "./components/pages/Dashboard";
+import { UserJourney } from "./components/pages/UserJourney";
+import { UsersList } from "./components/pages/UsersList";
+import { store } from "./store";
 
-const App: React.FC = () => {
+const App: FC = () => {
   return (
     <Provider store={store}>
       <Router>

@@ -43,7 +43,7 @@ A MERN stack (MongoDB, Express, React, Node.js) application with TypeScript that
 
    - Create `server/config.env` file
    - Add your MongoDB connection string and any other required environment variables
-   - TBA: add test user to Mongo?
+   - **TBA: add test user to Mongo? add test credentials**
 
 5. **Build the server**
 
@@ -168,7 +168,7 @@ Although Amazon DocumentDB is also MongoDB compatible, I found that Atlas offers
 
 API documentation is available after installation on: http://localhost:5050/api-docs
 
-TBA: add picture
+![Swagger](/assets/swagger.png)
 
 #### L2: Full API implementation. It should be working and hosted locally (The API should be available for testing via tools like Postman).
 

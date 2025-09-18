@@ -1,18 +1,18 @@
-import React from "react";
+import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
-import { useGetAllSessionsQuery } from "../../store/api/users";
-import { MetricCardsSection } from "../common/MetricCardsSection";
-import RevenueLineChart from "../analytics/RevenueLineChart";
-import DailyActiveUsersChart from "../analytics/DailyActiveUsersChart";
-import { SessionsTable } from "../common/SessionsTable";
 import {
   useGetDailyActiveUsersQuery,
   useGetDashboardStatsQuery,
   useGetRevenueOverTimeQuery,
 } from "../../store/api/analytics";
+import { useGetAllSessionsQuery } from "../../store/api/users";
+import DailyActiveUsersChart from "../analytics/DailyActiveUsersChart";
+import RevenueLineChart from "../analytics/RevenueLineChart";
+import { MetricCardsSection } from "../common/MetricCardsSection";
+import { SessionsTable } from "../common/SessionsTable";
 
-export const Dashboard: React.FC = () => {
+export const Dashboard: FC = () => {
   const { t } = useTranslation();
   const { data: dashboardStats, isLoading: statsLoading } =
     useGetDashboardStatsQuery();

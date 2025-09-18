@@ -4,6 +4,7 @@ import {
   User,
   UserEventsResponse,
   UserSessionsResponse,
+  UserSearchResponse,
 } from "../../types";
 
 const baseQuery = fetchBaseQuery({
@@ -50,6 +51,17 @@ export const usersApiSlice = createApi({
         { type: "User", id: userId },
       ],
     }),
+
+    // Search users by name and email
+    searchUsers: builder.query<UserSearchResponse, { query: string; limit?: number }>({
+      query: ({ query, limit = 10 }) => ({
+        url: "/users/search",
+        params: { q: query, limit },
+      }),
+      providesTags: (result, error, { query }) => [
+        { type: "User", id: `search-${query}` },
+      ],
+    }),
   }),
 });
 
@@ -59,4 +71,5 @@ export const {
   useGetUserSessionsQuery,
   useGetAllSessionsQuery,
   useGetUserEventsQuery,
+  useSearchUsersQuery,
 } = usersApiSlice;

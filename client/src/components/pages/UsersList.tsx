@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { useGetUsersQuery } from "../../store/api/users";
 import { useApiError } from "../../hooks/useApiError";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+import { UserSearch } from "../common/UserSearch";
 
 export const UsersList: FC = () => {
   const navigate = useNavigate();
@@ -15,6 +16,8 @@ export const UsersList: FC = () => {
   return (
     <UsersListContainer>
       <SectionTitle>{t("users.title")}</SectionTitle>
+
+      <UserSearch placeholder={t("navigation.search")} />
       <UsersSection>
         {loading ? (
           <LoadingMessage>{t("users.loadingUsers")}</LoadingMessage>
@@ -58,7 +61,7 @@ const UsersListContainer = styled.div`
 `;
 
 const SectionTitle = styled.h2`
-  margin: 0 0 20px 0;
+  margin: 0;
   color: #333;
   font-size: 24px;
   font-weight: 600;

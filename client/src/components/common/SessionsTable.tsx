@@ -1,28 +1,29 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import { FC } from "react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Session } from "../../types";
 import { calculateDuration } from "../../utils/helpers";
 
-interface SessionsTableProps {
+type Props = {
   sessions: Session[];
   title?: string;
   showUserColumn?: boolean;
-}
+};
 
-export const SessionsTable: React.FC<SessionsTableProps> = ({
+export const SessionsTable: FC<Props> = ({
   sessions,
   title,
   showUserColumn = false,
 }) => {
   const navigate = useNavigate();
   const { t } = useTranslation();
+
   if (!sessions || sessions.length === 0) {
     return (
       <SessionsTableContainer>
         {title && <SectionTitle>{title}</SectionTitle>}
-        <EmptyMessage>{t('sessions.noSessionsFound')}</EmptyMessage>
+        <EmptyMessage>{t("sessions.noSessionsFound")}</EmptyMessage>
       </SessionsTableContainer>
     );
   }
@@ -33,13 +34,13 @@ export const SessionsTable: React.FC<SessionsTableProps> = ({
       <Table>
         <thead>
           <tr>
-            <th>{t('sessions.sessionId')}</th>
-            {showUserColumn && <th>{t('sessions.userId')}</th>}
-            <th>{t('sessions.startTime')}</th>
-            <th>{t('sessions.endTime')}</th>
-            <th>{t('sessions.duration')}</th>
-            <th>{t('sessions.device')}</th>
-            <th>{t('sessions.ipAddress')}</th>
+            <th>{t("sessions.sessionId")}</th>
+            {showUserColumn && <th>{t("sessions.userId")}</th>}
+            <th>{t("sessions.startTime")}</th>
+            <th>{t("sessions.endTime")}</th>
+            <th>{t("sessions.duration")}</th>
+            <th>{t("sessions.device")}</th>
+            <th>{t("sessions.ipAddress")}</th>
           </tr>
         </thead>
         <tbody>
@@ -56,7 +57,8 @@ export const SessionsTable: React.FC<SessionsTableProps> = ({
               <td>{new Date(session.startTime).toLocaleString()}</td>
               <td>{new Date(session.endTime).toLocaleString()}</td>
               <td>
-                {calculateDuration(session.startTime, session.endTime)} {t('sessions.minutes')}
+                {calculateDuration(session.startTime, session.endTime)}{" "}
+                {t("sessions.minutes")}
               </td>
               <td>
                 {session.deviceInfo.browser} on {session.deviceInfo.os}

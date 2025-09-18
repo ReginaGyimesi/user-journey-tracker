@@ -38,7 +38,7 @@ db.users.createIndex();
 
 ## 2. Search by email or name with a partial search (Current implementation choice)
 
-- **Description:** Search by partial name or email.
+- **Description:** Search by partial name or email, also could do fuzzy search here (find possibilities even with typos), and autocomplete to predict ppssible search options.
 - **Example query:** (with regex)
 
 ```js
@@ -50,6 +50,22 @@ db.users.find({ email: { $regex: "alice", $options: "i" } });
 ```js
 db.users.createIndex({ email: 1 });
 db.users.createIndex({ fullName: "text" });
+```
+
+```js
+const users = await User.aggregate([
+  {
+    $search: {
+      index: "autocomplete_index",
+      autocomplete: {
+        query: q,
+        path: ["fullName", "email"],
+        fuzzy: { maxEdits: 2, prefixLength: 1 },
+      },
+    },
+  },
+  { $limit: 10 },
+]);
 ```
 
 - **Pros:**

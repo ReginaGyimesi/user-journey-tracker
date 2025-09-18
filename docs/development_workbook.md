@@ -107,9 +107,9 @@ Minimum requirements for MVP:
 - Refactor FE ✅
 - Add diagrams on the Dashboard page ✅
 - Refine endpoints and calculations ✅
-- Make a Postman call to API (although cURL works)
+- Make a Postman call to API (although CURL works) ✅
 - Think about how would it be best to do the search from an efficieny point of view ✅
-- Implement search
+- Implement search ✅
 - Implement the challenge - localisation to Hungarian language on the client side (and maybe server side, too?) ✅
 - Add cloud diagram
 - Add video for UI when ready
@@ -152,6 +152,9 @@ If time allows:
 #### Implement search, add cloud diagram
 
 - Implement search ([going with option 2](search_considerations.md#2-search-by-email-or-name-with-a-partial-search-current-implementation-choice))
+- Make postman call
+- Add cloud diagram, considerations
+- Add video of UI
 
 ### Tasks completed
 

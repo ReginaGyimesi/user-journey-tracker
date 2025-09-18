@@ -75,6 +75,138 @@ router.get("/users", async (req, res) => {
 
 /**
  * @swagger
+ * /api/users/search:
+ *   get:
+ *     summary: Search users by name and email
+ *     description: Search users with fuzzy search, partial matching, and autocomplete functionality
+ *     tags: [Users]
+ *     parameters:
+ *       - in: query
+ *         name: q
+ *         required: true
+ *         description: Search query for name or email
+ *         schema:
+ *           type: string
+ *           example: "john"
+ *       - in: query
+ *         name: limit
+ *         required: false
+ *         description: Maximum number of results to return
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *           minimum: 1
+ *           maximum: 50
+ *     responses:
+ *       200:
+ *         description: Search results retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 users:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/User'
+ *                 total:
+ *                   type: number
+ *                   description: Total number of matching users
+ *                 query:
+ *                   type: string
+ *                   description: The search query used
+ *       400:
+ *         description: Invalid search query
+ *         content:
+ *           text/plain:
+ *             schema:
+ *               type: string
+ *               example: "Search query is required"
+ *       500:
+ *         $ref: '#/components/responses/ErrorResponse'
+ */
+router.get("/users/search", async (req, res) => {
+  try {
+    const { q, limit = 10 } = req.query;
+
+    if (!q || typeof q !== 'string' || q.trim().length === 0) {
+      res.status(400).send("Search query is required");
+      return;
+    }
+
+    const searchQuery = q.trim();
+    const maxLimit = Math.min(parseInt(limit as string) || 10, 50);
+
+    const db = await connectToDatabase();
+    const usersCollection = db.collection<User>("users");
+
+    // Create a regex pattern for partial matching (case-insensitive)
+    const regexPattern = new RegExp(searchQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+
+    // Search in both name and email fields
+    const searchResults = await usersCollection
+      .find({
+        $or: [
+          { name: { $regex: regexPattern } },
+          { email: { $regex: regexPattern } }
+        ]
+      })
+      .limit(maxLimit)
+      .toArray();
+
+    // For fuzzy search, we'll also try some common typos and variations
+    const fuzzyResults = await usersCollection
+      .find({
+        $or: [
+          // Exact matches first
+          { name: { $regex: regexPattern } },
+          { email: { $regex: regexPattern } },
+          // Fuzzy matches for common typos (simple implementation)
+          { name: { $regex: new RegExp(searchQuery.replace(/[aeiou]/g, '[aeiou]'), 'i') } },
+          { email: { $regex: new RegExp(searchQuery.replace(/[aeiou]/g, '[aeiou]'), 'i') } }
+        ]
+      })
+      .limit(maxLimit)
+      .toArray();
+
+    // Combine and deduplicate results
+    const allResults = [...searchResults, ...fuzzyResults];
+    const uniqueResults = allResults.filter((user, index, self) => 
+      index === self.findIndex(u => u._id === user._id)
+    );
+
+    // Sort results by relevance (exact matches first, then partial matches)
+    const sortedResults = uniqueResults.sort((a, b) => {
+      const aNameMatch = a.name.toLowerCase().includes(searchQuery.toLowerCase());
+      const aEmailMatch = a.email.toLowerCase().includes(searchQuery.toLowerCase());
+      const bNameMatch = b.name.toLowerCase().includes(searchQuery.toLowerCase());
+      const bEmailMatch = b.email.toLowerCase().includes(searchQuery.toLowerCase());
+
+      // Exact matches get higher priority
+      if (aNameMatch && !bNameMatch) return -1;
+      if (!aNameMatch && bNameMatch) return 1;
+      if (aEmailMatch && !bEmailMatch) return -1;
+      if (!aEmailMatch && bEmailMatch) return 1;
+
+      // Then sort by name alphabetically
+      return a.name.localeCompare(b.name);
+    });
+
+    const response = {
+      users: sortedResults.slice(0, maxLimit),
+      total: sortedResults.length,
+      query: searchQuery
+    };
+
+    res.send(response).status(200);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error searching users");
+  }
+});
+
+/**
+ * @swagger
  * /api/users/{id}:
  *   get:
  *     summary: Get a single user by ID

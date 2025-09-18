@@ -1,10 +1,11 @@
-import React from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { FC } from "react";
 import { useTranslation } from "react-i18next";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { LanguageSelector } from "./LanguageSelector";
+import { UserSearch } from "./UserSearch";
 
-export const NavBar: React.FC = () => {
+export const NavBar: FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation();
@@ -35,7 +36,7 @@ export const NavBar: React.FC = () => {
         </NavLink>
       </SectionTitle>
       <SearchContainer>
-        <SearchInput placeholder={t("navigation.search")} />
+        <UserSearch placeholder={t("navigation.search")} />
         <LanguageSelector />
       </SearchContainer>
     </NavigationBar>
@@ -109,18 +110,5 @@ const NavLink = styled.button<{ $isActive?: boolean }>`
 const SearchContainer = styled.div`
   display: flex;
   align-items: center;
-`;
-
-const SearchInput = styled.input`
-  padding: 8px 12px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 14px;
-  width: 300px;
-
-  &:focus {
-    outline: none;
-    border-color: #4f46e5;
-    box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1);
-  }
+  gap: 12px;
 `;

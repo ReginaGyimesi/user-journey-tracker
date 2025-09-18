@@ -40,3 +40,9 @@ export interface Event {
     price?: number;
   };
 }
+
+export interface UserSearchResponse {
+  users: User[];
+  total: number;
+  query: string;
+}

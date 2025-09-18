@@ -84,3 +84,9 @@ export interface DailyActiveUsersData {
   activeUsers: number;
   date: string;
 }
+
+export interface UserSearchResponse {
+  users: User[];
+  total: number;
+  query: string;
+}

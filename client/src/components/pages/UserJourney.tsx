@@ -1,7 +1,7 @@
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
-import React, { FC } from "react";
-import { useParams } from "react-router-dom";
+import { FC, Fragment } from "react";
 import { useTranslation } from "react-i18next";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { useApiError } from "../../hooks/useApiError";
 import {
@@ -9,9 +9,9 @@ import {
   useGetUserEventsQuery,
   useGetUserSessionsQuery,
 } from "../../store/api/users";
-import { SessionsTable } from "../common/SessionsTable";
-import { MetricCardsSection } from "../common/MetricCardsSection";
 import { getRecentSessionEvents } from "../../utils/helpers";
+import { MetricCardsSection } from "../common/MetricCardsSection";
+import { SessionsTable } from "../common/SessionsTable";
 
 export const UserJourney: FC = () => {
   const { userId } = useParams<{ userId: string }>();
@@ -120,10 +120,10 @@ export const UserJourney: FC = () => {
           <SessionEventsSection>
             <JourneyFlow>
               {sessionEvents.map((event, index) => (
-                <React.Fragment key={event._id}>
+                <Fragment key={event._id}>
                   <FlowStep>{event.event_type}</FlowStep>
                   {index < sessionEvents.length - 1 && <FlowArrow>→</FlowArrow>}
-                </React.Fragment>
+                </Fragment>
               ))}
             </JourneyFlow>
           </SessionEventsSection>

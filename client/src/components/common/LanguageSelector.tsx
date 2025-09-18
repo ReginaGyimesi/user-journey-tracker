@@ -1,8 +1,8 @@
-import React from 'react';
-import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import { FC } from "react";
+import { useTranslation } from "react-i18next";
+import styled from "styled-components";
 
-export const LanguageSelector: React.FC = () => {
+export const LanguageSelector: FC = () => {
   const { i18n } = useTranslation();
 
   const changeLanguage = (lng: string) => {
@@ -12,14 +12,14 @@ export const LanguageSelector: React.FC = () => {
   return (
     <LanguageSelectorContainer>
       <LanguageButton
-        $isActive={i18n.language === 'en'}
-        onClick={() => changeLanguage('en')}
+        $isActive={i18n.language === "en"}
+        onClick={() => changeLanguage("en")}
       >
         EN
       </LanguageButton>
       <LanguageButton
-        $isActive={i18n.language === 'hu'}
-        onClick={() => changeLanguage('hu')}
+        $isActive={i18n.language === "hu"}
+        onClick={() => changeLanguage("hu")}
       >
         HU
       </LanguageButton>
@@ -34,8 +34,8 @@ const LanguageSelectorContainer = styled.div`
 `;
 
 const LanguageButton = styled.button<{ $isActive: boolean }>`
-  background: ${props => props.$isActive ? '#4f46e5' : 'white'};
-  color: ${props => props.$isActive ? 'white' : '#333'};
+  background: ${(props) => (props.$isActive ? "#4f46e5" : "white")};
+  color: ${(props) => (props.$isActive ? "white" : "#333")};
   border: 1px solid #ddd;
   border-radius: 4px;
   padding: 6px 10px;
@@ -45,7 +45,7 @@ const LanguageButton = styled.button<{ $isActive: boolean }>`
   transition: all 0.2s;
 
   &:hover {
-    background: ${props => props.$isActive ? '#4338ca' : '#f0f0f0'};
+    background: ${(props) => (props.$isActive ? "#4338ca" : "#f0f0f0")};
     border-color: #4f46e5;
   }
 

@@ -97,7 +97,7 @@ const NavLink = styled.button<{ $isActive?: boolean }>`
     &::after {
       content: '';
       position: absolute;
-      bottom: -18px;
+      bottom: -20px;
       left: 50%;
       transform: translateX(-50%);
       width: calc(100% - 24px);

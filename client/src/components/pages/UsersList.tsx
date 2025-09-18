@@ -1,11 +1,10 @@
-import { FC } from "react";
-import { useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import styled from "styled-components";
-import { useGetUsersQuery } from "../../store/api/users";
-import { useApiError } from "../../hooks/useApiError";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
-import { UserSearch } from "../common/UserSearch";
+import { FC } from "react";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import { useApiError } from "../../hooks/useApiError";
+import { useGetUsersQuery } from "../../store/api/users";
 
 export const UsersList: FC = () => {
   const navigate = useNavigate();
@@ -16,8 +15,6 @@ export const UsersList: FC = () => {
   return (
     <UsersListContainer>
       <SectionTitle>{t("users.title")}</SectionTitle>
-
-      <UserSearch placeholder={t("navigation.search")} />
       <UsersSection>
         {loading ? (
           <LoadingMessage>{t("users.loadingUsers")}</LoadingMessage>

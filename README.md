@@ -211,9 +211,9 @@ User stories:
 
 #### L3: Simple Web App (hosted at least locally) with data display/visualization views/pages connected to Backend API (no data entry forms)
 
-**Click the image below this text to watch the video:**
+**[Watch the demo here](https://drive.google.com/file/d/1kteOjsr3DBuQwC8rZM6aCuKyb1DiNbtd/view?usp=sharing)**
 
-[![Demo](/assets/screen1.png)](https://drive.google.com/file/d/1kteOjsr3DBuQwC8rZM6aCuKyb1DiNbtd/view?usp=sharing)
+![Demo](/assets/screen1.png)
 
 ![Search user](/assets/screen2.png)
 

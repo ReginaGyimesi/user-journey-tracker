@@ -211,7 +211,10 @@ User stories:
 
 #### L3: Simple Web App (hosted at least locally) with data display/visualization views/pages connected to Backend API (no data entry forms)
 
-TBA gif or video
+<video width="640" height="360" controls>
+  <source src="/assets/example-flow.mov" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
 
 ## Bonus challenge
 

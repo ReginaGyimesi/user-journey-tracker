@@ -50,4 +50,12 @@ flowchart TB
     class CW monitoringClass
 ```
 
-## Components, notes
+## Components
+
+1. User: users interact with the shopping platform via a browser.
+2. CloudFront: Content Delivery Network that caches and serves static assets (React build files, images, scripts) from S3 with low latency.
+3. S3 React Frontend: Hosts the compiled React application, delivering static assets to CloudFront.
+4. API Gateway: Managed gateway for routing frontend HTTP requests to backend services, handling security, throttling, and monitoring integration.
+5. Lambda Node.js Backend: Serverless backend (Express/Node.js functions) that processes user events, API requests, and business logic.
+6. Amazon DocumentDB: MongoDB-compatible database storing users, sessions, and events. Provides query and analytics capabilities.
+7. CloudWatch: Centralized logging and monitoring service, capturing metrics, performance data, and errors from backend services.

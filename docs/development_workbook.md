@@ -111,7 +111,7 @@ Minimum requirements for MVP:
 - Think about how would it be best to do the search from an efficieny point of view ✅
 - Implement search ✅
 - Implement the challenge - localisation to Hungarian language on the client side (and maybe server side, too?) ✅
-- Add cloud diagram
+- Add cloud diagram ✅
 - Add video for UI when ready ✅
 - Documentation and justifications ✅
 
@@ -158,8 +158,23 @@ If time allows:
 
 ### Tasks completed
 
--
+- Implemented search
+- Verified API with PostMan, added doc
+- Added demo
+
+## Date: 2025-09-21
+
+### Finishing touches
+
+#### Implement search, add cloud diagram
+
+- Cloud infra notes
+- Verify app setup locally
+
+### Tasks completed
+
+- Added [component notes](/docs/architecture_diagram.md)
 
 ### Challenges
 
--
+- Cloud infra deep dive

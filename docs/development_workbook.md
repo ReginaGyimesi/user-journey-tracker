@@ -145,7 +145,7 @@ If time allows:
 - Skipped generating more languages as I can't validate the generated text
 - Understanding search logic
 
-## Date: 2025-09-18
+## Date: 2025-09-18 (time spent ~4 hours)
 
 ### Goals for today
 
@@ -162,7 +162,7 @@ If time allows:
 - Verified API with PostMan, added doc
 - Added demo
 
-## Date: 2025-09-21
+## Date: 2025-09-21 (time spent ~1 hour)
 
 ### Finishing touches
 

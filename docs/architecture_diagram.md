@@ -1,6 +1,8 @@
 # Architecture diagram
 
-## System Architecture
+## System architecture proposal
+
+The current architecture is running locally and has not yet been deployed to the cloud. The diagram below is based on my proposed AWS stack. 
 
 ```mermaid
 flowchart TB

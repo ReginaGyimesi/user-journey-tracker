@@ -8,6 +8,7 @@ Built with Node.js, TypeScript, Express, and MongoDB. Provides RESTful APIs for 
 
 ```bash
 npm install
+npm run build
 npm start
 ```
 

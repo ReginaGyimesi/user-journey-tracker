@@ -54,7 +54,7 @@ flowchart TB
 
 ## Components
 
-1. User: users interact with the shopping platform via a browser.
+1. User: users interact with the tracking platform via a browser.
 2. CloudFront: Content Delivery Network that caches and serves static assets (React build files, images, scripts) from S3 with low latency.
 3. S3 React Frontend: Hosts the compiled React application, delivering static assets to CloudFront.
 4. API Gateway: Managed gateway for routing frontend HTTP requests to backend services, handling security, throttling, and monitoring integration.

@@ -174,6 +174,7 @@ If time allows:
 ### Tasks completed
 
 - Added [component notes](/docs/architecture_diagram.md)
+- Deleted app locally, and setup again from [installation guide](README.md#installation-guide)
 
 ### Challenges
 
